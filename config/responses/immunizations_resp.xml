@@ -1,37 +1,37 @@
 <Bundle xmlns="http://hl7.org/fhir">
    <meta>
-      <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/GPConnect-StructuredRecord-Bundle-1"></profile>
+      <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/GPConnect-StructuredRecord-Bundle-1"/>
    </meta>
-   <type value="collection"></type>
+   <type value="collection"/>
    <entry>
       <resource>
          <List xmlns="http://hl7.org/fhir">
             <meta>
-               <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-List-1"></profile>
+               <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-List-1"/>
             </meta>
-            <status value="current"></status>
-            <mode value="snapshot"></mode>
-            <title value="Immunisations"></title>
+            <status value="current"/>
+            <mode value="snapshot"/>
+            <title value="Immunisations"/>
             <code>
                <coding>
-                  <system value="http://snomed.info/sct"></system>
-                  <code value="1102181000000102"></code>
-                  <display value="Immunisations"></display>
+                  <system value="http://snomed.info/sct"/>
+                  <code value="1102181000000102"/>
+                  <display value="Immunisations"/>
                </coding>
             </code>
             <subject>
-               <reference value="Patient/04603d77-1a4e-4d63-b246-d7504f8bd833"></reference>
+               <reference value="Patient/04603d77-1a4e-4d63-b246-d7504f8bd833"/>
             </subject>
-            <date value="2019-03-01T10:57:34+00:00"></date>
+            <date value="2019-03-01T10:57:34+00:00"/>
             <orderedBy>
                <coding>
-                  <system value="http://hl7.org/fhir/list-order"></system>
-                  <code value="event-date"></code>
+                  <system value="http://hl7.org/fhir/list-order"/>
+                  <code value="event-date"/>
                </coding>
             </orderedBy>
             <entry>
                <item>
-                  <reference value="Immunization/eba25af1-5b74-4790-aa5a-2134fd27ad45"></reference>
+                  <reference value="Immunization/eba25af1-5b74-4790-aa5a-2134fd27ad45"/>
                </item>
             </entry>
          </List>
@@ -40,10 +40,10 @@
    <entry>
       <resource>
          <Location xmlns="http://hl7.org/fhir">
-            <id value="17"></id>
+            <id value="17"/>
             <meta>
-               <versionId value="636064088100870233"></versionId>
-               <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Location-1"></profile>
+               <versionId value="636064088100870233"/>
+               <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Location-1"/>
             </meta>
 			  <name value="COXWOLD Surgery"/>
 			  <address>
@@ -63,111 +63,111 @@
    <entry>
       <resource>
          <Immunization xmlns="http://hl7.org/fhir">
-            <id value="eba25af1-5b74-4790-aa5a-2134fd27ad45"></id>
+            <id value="eba25af1-5b74-4790-aa5a-2134fd27ad45"/>
             <meta>
-               <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Immunization-1"></profile>
+               <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Immunization-1"/>
             </meta>
             <extension url="https://fhir.nhs.uk/STU3/StructureDefinition/Extension-CareConnect-GPC-ParentPresent-1">
-               <valueBoolean value="true"></valueBoolean>
+               <valueBoolean value="true"/>
             </extension>
             <extension url="https://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-CareConnect-DateRecorded-1">
-               <valueDateTime value="2019-06-28T10:00:00+01:00"></valueDateTime>
+               <valueDateTime value="2019-06-28T10:00:00+01:00"/>
             </extension>
             <extension url="https://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-CareConnect-VaccinationProcedure-1">
                <valueCodeableConcept>
                   <coding>
-                     <system value="http://snomed.info/sct"></system>
-                     <code value="170378007"></code>
-                     <display value="First hepatitis A vaccination"></display>
+                     <system value="http://snomed.info/sct"/>
+                     <code value="170378007"/>
+                     <display value="First hepatitis A vaccination"/>
                   </coding>
                </valueCodeableConcept>
             </extension>
             <identifier>
-               <system value="https://fhir.nhs.uk/Id/cross-care-setting-identifier"></system>
-               <value value="urn:uuid:eba25af1-5b74-4790-aa5a-2134fd27ad75"></value>
+               <system value="https://fhir.nhs.uk/Id/cross-care-setting-identifier"/>
+               <value value="urn:uuid:eba25af1-5b74-4790-aa5a-2134fd27ad75"/>
             </identifier>
-            <status value="completed"></status>
-            <notGiven value="false"></notGiven>
+            <status value="completed"/>
+            <notGiven value="false"/>
             <vaccineCode>
                <coding>
-                  <system value="http://hl7.org/fhir/v3/NullFlavor"></system>
-                  <code value="UNK"></code>
+                  <system value="http://hl7.org/fhir/v3/NullFlavor"/>
+                  <code value="UNK"/>
                </coding>
-               <text value="Unknown"></text>
+               <text value="Unknown"/>
             </vaccineCode>
             <patient>
-               <reference value="Patient/04603d77-1a4e-4d63-b246-d7504f8bd833"></reference>
+               <reference value="Patient/04603d77-1a4e-4d63-b246-d7504f8bd833"/>
             </patient>
             <encounter>
-               <reference value="Encounter/Encounter1"></reference>
+               <reference value="Encounter/Encounter1"/>
             </encounter>
-            <date value="2019-06-28"></date>
-            <primarySource value="true"></primarySource>
+            <date value="2019-06-28"/>
+            <primarySource value="true"/>
             <location>
-               <reference value="Location/17"></reference>
+               <reference value="Location/17"/>
             </location>
             <manufacturer>
-               <reference value="Organization/db67f447-b30d-442a-8e31-6918d1367eec"></reference>
+               <reference value="Organization/db67f447-b30d-442a-8e31-6918d1367eec"/>
             </manufacturer>
-            <lotNumber value="AAJN11K"></lotNumber>
-            <expirationDate value="2019-12-15"></expirationDate>
+            <lotNumber value="AAJN11K"/>
+            <expirationDate value="2019-12-15"/>
             <site>
                <coding>
-                  <system value="http://snomed.info/sct"></system>
-                  <code value="368209003"></code>
-                  <display value="Right upper arm"></display>
+                  <system value="http://snomed.info/sct"/>
+                  <code value="368209003"/>
+                  <display value="Right upper arm"/>
                </coding>
             </site>
             <route>
                <coding>
-                  <system value="http://snomed.info/sct"></system>
-                  <code value="34206005"></code>
-                  <display value="Subcutaneous route"></display>
+                  <system value="http://snomed.info/sct"/>
+                  <code value="34206005"/>
+                  <display value="Subcutaneous route"/>
                </coding>
             </route>
             <doseQuantity>
-               <value value="0.5"></value>
-               <system value="http://unitsofmeasure.org"></system>
-               <code value="ml"></code>
+               <value value="0.5"/>
+               <system value="http://unitsofmeasure.org"/>
+               <code value="ml"/>
             </doseQuantity>
             <practitioner>
                <role>
                   <coding>
-                     <system value="http://hl7.org/fhir/stu3/valueset-immunization-role.html"></system>
-                     <code value="AP"></code>
+                     <system value="http://hl7.org/fhir/stu3/valueset-immunization-role.html"/>
+                     <code value="AP"/>
                   </coding>
                </role>
                <actor>
-                  <reference value="Practitioner/6c41ebfd-57c3-4162-9d7b-208c171a2fd7"></reference>
+                  <reference value="Practitioner/6c41ebfd-57c3-4162-9d7b-208c171a2fd7"/>
                </actor>
             </practitioner>
             <note>
-               <text value="Notes on adminstration of vaccine"></text>
+               <text value="Notes on adminstration of vaccine"/>
             </note>
             <explanation>
                <reason>
                   <coding>
-                     <system value="http://snomed.info/sct"></system>
-                     <code value="171279008"></code>
-                     <display value="Immunisation due"></display>
+                     <system value="http://snomed.info/sct"/>
+                     <code value="171279008"/>
+                     <display value="Immunisation due"/>
                   </coding>
                </reason>
             </explanation>
             <vaccinationProtocol>
-               <doseSequence value="1"></doseSequence>
-               <seriesDoses value="3"></seriesDoses>
+               <doseSequence value="1"/>
+               <seriesDoses value="3"/>
                <targetDisease>
                   <coding>
-                     <system value="http://snomed.info/sct"></system>
-                     <code value="40468003"></code>
-                     <display value="Viral hepatitis, type A"></display>
+                     <system value="http://snomed.info/sct"/>
+                     <code value="40468003"/>
+                     <display value="Viral hepatitis, type A"/>
                   </coding>
                </targetDisease>
                <doseStatus>
                   <coding>
-                     <system value="http://hl7.org/fhir/stu3/valueset-vaccination-protocol-dose-status.html"></system>
-                     <code value="count"></code>
-                     <display value="Counts"></display>
+                     <system value="http://hl7.org/fhir/stu3/valueset-vaccination-protocol-dose-status.html"/>
+                     <code value="count"/>
+                     <display value="Counts"/>
                   </coding>
                </doseStatus>
             </vaccinationProtocol>

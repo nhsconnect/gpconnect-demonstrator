@@ -33,6 +33,7 @@ import java.util.stream.Collectors;
 @Service
 @Transactional
 public class DatabaseRefresher {
+
     private static final Logger LOG = Logger.getLogger(DatabaseRefresher.class);
 
     @Value("${config.path}")
@@ -77,12 +78,14 @@ public class DatabaseRefresher {
                 LOG.info("Read " + filename);
 
                 for (String sql : Arrays.asList(sqls)) {
-                    try {
-                        entityManager
-                            .createNativeQuery(sql)
-                            .executeUpdate();
-                    } catch (Exception ex) {
-                        LOG.error("Error executing " + filename);
+                    if (!sql.trim().isEmpty()) {
+                        try {
+                            entityManager
+                                    .createNativeQuery(sql)
+                                    .executeUpdate();
+                        } catch (Exception ex) {
+                            LOG.error("Error executing " + filename);
+                        }
                     }
                 }
 

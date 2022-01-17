@@ -1,47 +1,47 @@
 <Bundle xmlns="http://hl7.org/fhir">
    <meta>
-      <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/GPConnect-StructuredRecord-Bundle-1"></profile>
+      <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/GPConnect-StructuredRecord-Bundle-1"/>
    </meta>
-   <type value="collection"></type>
+   <type value="collection"/>
    <entry>
       <resource>
          <List xmlns="http://hl7.org/fhir">
             <meta>
-               <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-List-1"></profile>
+               <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-List-1"/>
             </meta>
-            <status value="current"></status>
-            <mode value="snapshot"></mode>
-            <title value="Uncategorised data"></title>
+            <status value="current"/>
+            <mode value="snapshot"/>
+            <title value="Uncategorised data"/>
             <code>
                <coding>
-                  <system value="http://snomed.info/sct"></system>
-                  <code value="826501000000100"></code>
-                  <display value="Miscellaneous record"></display>
+                  <system value="http://snomed.info/sct"/>
+                  <code value="826501000000100"/>
+                  <display value="Miscellaneous record"/>
                </coding>
             </code>
             <subject>
-               <reference value="Patient/04603d77-1a4e-4d63-b246-d7504f8bd833"></reference>
+               <reference value="Patient/04603d77-1a4e-4d63-b246-d7504f8bd833"/>
             </subject>
-            <date value="2019-03-01T10:57:34+00:00"></date>
+            <date value="2019-03-01T10:57:34+00:00"/>
             <orderedBy>
                <coding>
-                  <system value="http://hl7.org/fhir/list-order"></system>
-                  <code value="event-date"></code>
+                  <system value="http://hl7.org/fhir/list-order"/>
+                  <code value="event-date"/>
                </coding>
             </orderedBy>
             <entry>
                <item>
-                  <reference value="Observation/Consultation1_topic2_category_Examination_Observation_1"></reference>
+                  <reference value="Observation/Consultation1_topic2_category_Examination_Observation_1"/>
                </item>
             </entry>
             <entry>
                <item>
-                  <reference value="Observation/Consultation1_topic2_category_Examination_Observation_2"></reference>
+                  <reference value="Observation/Consultation1_topic2_category_Examination_Observation_2"/>
                </item>
             </entry>
             <entry>
                <item>
-                  <reference value="Observation/Consultation1_topic2_category_Examination_Observation_3"></reference>
+                  <reference value="Observation/Consultation1_topic2_category_Examination_Observation_3"/>
                </item>
             </entry>
          </List>
@@ -50,46 +50,46 @@
    <entry>
       <resource>
          <Observation xmlns="http://hl7.org/fhir">
-            <id value="Consultation1_topic2_category_Examination_Observation_1"></id>
+            <id value="Consultation1_topic2_category_Examination_Observation_1"/>
             <meta>
-               <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Observation-1"></profile>
+               <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Observation-1"/>
             </meta>
-            <status value="final"></status>
+            <status value="final"/>
             <identifier>
-               <system value="https://fhir.nhs.uk/Id/cross-care-setting-identifier"></system>
-               <value value="urn:uuid:eba25af1-5b74-4790-aa5a-2134fd27ad77"></value>
+               <system value="https://fhir.nhs.uk/Id/cross-care-setting-identifier"/>
+               <value value="urn:uuid:eba25af1-5b74-4790-aa5a-2134fd27ad77"/>
             </identifier>
             <code>
                <coding>
                   <extension url="https://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-coding-sctdescid">
                      <extension url="DescriptionID">
-                        <valueId value="3008650016"></valueId>
+                        <valueId value="3008650016"/>
                      </extension>
                      <extension url="descriptionDisplay">
-                        <valueString value="Temperature"></valueString>
+                        <valueString value="Temperature"/>
                      </extension>
                   </extension>
-                  <system value="http://snomed.info/sct"></system>
-                  <code value="703421000"></code>
-                  <display value="Temperature"></display>
+                  <system value="http://snomed.info/sct"/>
+                  <code value="703421000"/>
+                  <display value="Temperature"/>
                </coding>
             </code>
             <subject>
-               <reference value="Patient/04603d77-1a4e-4d63-b246-d7504f8bd833"></reference>
+               <reference value="Patient/04603d77-1a4e-4d63-b246-d7504f8bd833"/>
             </subject>
-            <issued value="2019-04-03T12:00:00+00:00"></issued>
+            <issued value="2019-04-03T12:00:00+00:00"/>
 		   <performer>
-			  <reference value="Practitioner/6c41ebfd-57c3-4162-9d7b-208c171a2fd7"></reference>
+			  <reference value="Practitioner/6c41ebfd-57c3-4162-9d7b-208c171a2fd7"/>
 		   </performer>
             <context>
-               <reference value="Encounter/Encounter1"></reference>
+               <reference value="Encounter/Encounter1"/>
             </context>
-            <effectiveDateTime value="2019-03-28T10:30:00"></effectiveDateTime>
+            <effectiveDateTime value="2019-03-28T10:30:00"/>
             <valueQuantity>
-               <value value="36.7"></value>
-               <unit value="C"></unit>
-               <system value="http://unitsofmeasure.org"></system>
-               <code value="Cel"></code>
+               <value value="36.7"/>
+               <unit value="C"/>
+               <system value="http://unitsofmeasure.org"/>
+               <code value="Cel"/>
             </valueQuantity>
          </Observation>
       </resource>
@@ -97,46 +97,46 @@
    <entry>
       <resource>
          <Observation xmlns="http://hl7.org/fhir">
-            <id value="Consultation1_topic2_category_Examination_Observation_2"></id>
+            <id value="Consultation1_topic2_category_Examination_Observation_2"/>
             <meta>
-               <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Observation-1"></profile>
+               <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Observation-1"/>
             </meta>
-            <status value="final"></status>
+            <status value="final"/>
             <identifier>
-               <system value="https://fhir.nhs.uk/Id/cross-care-setting-identifier"></system>
-               <value value="urn:uuid:eba25af1-5b74-4790-aa5a-2134fd27ad78"></value>
+               <system value="https://fhir.nhs.uk/Id/cross-care-setting-identifier"/>
+               <value value="urn:uuid:eba25af1-5b74-4790-aa5a-2134fd27ad78"/>
             </identifier>
             <code>
                <coding>
                   <extension url="https://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-coding-sctdescid">
                      <extension url="DescriptionID">
-                        <valueId value="2748921000000116"></valueId>
+                        <valueId value="2748921000000116"/>
                      </extension>
                      <extension url="descriptionDisplay">
-                        <valueString value="Arterial oxygen saturation on room air at rest"></valueString>
+                        <valueString value="Arterial oxygen saturation on room air at rest"/>
                      </extension>
                   </extension>
-                  <system value="http://snomed.info/sct"></system>
-                  <code value="1097811000000106"></code>
-                  <display value="Arterial oxygen saturation breathing room air at rest"></display>
+                  <system value="http://snomed.info/sct"/>
+                  <code value="1097811000000106"/>
+                  <display value="Arterial oxygen saturation breathing room air at rest"/>
                </coding>
             </code>
             <subject>
-               <reference value="Patient/04603d77-1a4e-4d63-b246-d7504f8bd833"></reference>
+               <reference value="Patient/04603d77-1a4e-4d63-b246-d7504f8bd833"/>
             </subject>
-            <issued value="2019-04-03T12:00:00+00:00"></issued>
+            <issued value="2019-04-03T12:00:00+00:00"/>
 		   <performer>
-			  <reference value="Practitioner/6c41ebfd-57c3-4162-9d7b-208c171a2fd7"></reference>
+			  <reference value="Practitioner/6c41ebfd-57c3-4162-9d7b-208c171a2fd7"/>
 		   </performer>
             <context>
-               <reference value="Encounter/Encounter1"></reference>
+               <reference value="Encounter/Encounter1"/>
             </context>
-            <effectiveDateTime value="2019-03-28T10:30:00"></effectiveDateTime>
+            <effectiveDateTime value="2019-03-28T10:30:00"/>
             <valueQuantity>
-               <value value="96"></value>
-               <unit value="%"></unit>
-               <system value="http://unitsofmeasure.org"></system>
-               <code value="%"></code>
+               <value value="96"/>
+               <unit value="%"/>
+               <system value="http://unitsofmeasure.org"/>
+               <code value="%"/>
             </valueQuantity>
          </Observation>
       </resource>
@@ -144,46 +144,46 @@
    <entry>
       <resource>
          <Observation xmlns="http://hl7.org/fhir">
-            <id value="Consultation1_topic2_category_Examination_Observation_3"></id>
+            <id value="Consultation1_topic2_category_Examination_Observation_3"/>
             <meta>
-               <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Observation-1"></profile>
+               <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Observation-1"/>
             </meta>
             <identifier>
-               <system value="https://fhir.nhs.uk/Id/cross-care-setting-identifier"></system>
-               <value value="urn:uuid:eba25af1-5b74-4790-aa5a-2134fd27ad79"></value>
+               <system value="https://fhir.nhs.uk/Id/cross-care-setting-identifier"/>
+               <value value="urn:uuid:eba25af1-5b74-4790-aa5a-2134fd27ad79"/>
             </identifier>
-            <status value="final"></status>
+            <status value="final"/>
             <code>
                <coding>
                   <extension url="https://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-coding-sctdescid">
                      <extension url="DescriptionID">
-                        <valueId value="143107019"></valueId>
+                        <valueId value="143107019"/>
                      </extension>
                      <extension url="descriptionDisplay">
-                        <valueString value="Respiratory rate"></valueString>
+                        <valueString value="Respiratory rate"/>
                      </extension>
                   </extension>
-                  <system value="http://snomed.info/sct"></system>
-                  <code value=" 86290005"></code>
-                  <display value="Respiratory rate"></display>
+                  <system value="http://snomed.info/sct"/>
+                  <code value=" 86290005"/>
+                  <display value="Respiratory rate"/>
                </coding>
             </code>
-            <issued value="2019-04-03T12:00:00+00:00"></issued>
+            <issued value="2019-04-03T12:00:00+00:00"/>
             <subject>
-               <reference value="Patient/9340157B-6973-4209-9B57-BF6C64F29E46"></reference>
+               <reference value="Patient/9340157B-6973-4209-9B57-BF6C64F29E46"/>
             </subject>
 		   <performer>
-			  <reference value="Practitioner/6c41ebfd-57c3-4162-9d7b-208c171a2fd7"></reference>
+			  <reference value="Practitioner/6c41ebfd-57c3-4162-9d7b-208c171a2fd7"/>
 		   </performer>
             <context>
-               <reference value="Encounter/Encounter1"></reference>
+               <reference value="Encounter/Encounter1"/>
             </context>
-            <effectiveDateTime value="2019-03-28T10:30:00"></effectiveDateTime>
+            <effectiveDateTime value="2019-03-28T10:30:00"/>
             <valueQuantity>
-               <value value="16"></value>
-               <unit value="breaths per minute"></unit>
-               <system value="http://unitsofmeasure.org"></system>
-               <code value="{resps}/min"></code>
+               <value value="16"/>
+               <unit value="breaths per minute"/>
+               <system value="http://unitsofmeasure.org"/>
+               <code value="{resps}/min"/>
             </valueQuantity>
          </Observation>
       </resource>

@@ -1,42 +1,42 @@
 <Bundle xmlns="http://hl7.org/fhir">
    <meta>
-      <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/GPConnect-StructuredRecord-Bundle-1"></profile>
+      <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/GPConnect-StructuredRecord-Bundle-1"/>
    </meta>
-   <type value="collection"></type>
+   <type value="collection"/>
    <entry>
       <resource>
          <List xmlns="http://hl7.org/fhir">
             <meta>
-               <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-List-1"></profile>
+               <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-List-1"/>
             </meta>
-            <status value="current"></status>
-            <mode value="snapshot"></mode>
-            <title value="Investigations and results"></title>
+            <status value="current"/>
+            <mode value="snapshot"/>
+            <title value="Investigations and results"/>
             <code>
                <coding>
-                  <system value="http://snomed.info/sct"></system>
-                  <code value="887191000000108"></code>
-                  <display value="Investigations and results"></display>
+                  <system value="http://snomed.info/sct"/>
+                  <code value="887191000000108"/>
+                  <display value="Investigations and results"/>
                </coding>
             </code>
             <subject>
-               <reference value="Patient/8d6c2cd5-0eec-496a-88d0-3785a135df09"></reference>
+               <reference value="Patient/8d6c2cd5-0eec-496a-88d0-3785a135df09"/>
             </subject>
-            <date value="2018-03-01T10:57:34+00:00"></date>
+            <date value="2018-03-01T10:57:34+00:00"/>
             <orderedBy>
                <coding>
-                  <system value="http://hl7.org/fhir/list-order"></system>
-                  <code value="event-date"></code>
+                  <system value="http://hl7.org/fhir/list-order"/>
+                  <code value="event-date"/>
                </coding>
             </orderedBy>
             <entry>
                <item>
-                  <reference value="DiagnosticReport/efae5859-28df-4e7d-be91-6df56d8215e4"></reference>
+                  <reference value="DiagnosticReport/efae5859-28df-4e7d-be91-6df56d8215e4"/>
                </item>
             </entry>
             <entry>
                <item>
-                  <reference value="DiagnosticReport/efae5859-28df-4e7d-be91-6df56d8215e5"></reference>
+                  <reference value="DiagnosticReport/efae5859-28df-4e7d-be91-6df56d8215e5"/>
                </item>
             </entry>
          </List>
@@ -45,39 +45,39 @@
    <entry>
       <resource>
          <ProcedureRequest xmlns="http://hl7.org/fhir">
-            <id value="d9df1431-22ac-462a-946a-f195f6c639af"></id>
+            <id value="d9df1431-22ac-462a-946a-f195f6c639af"/>
             <meta>
-               <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-ProcedureRequest-1"></profile>
+               <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-ProcedureRequest-1"/>
             </meta>
             <identifier>
-               <system value="https://tools.ietf.org/html/rfc4122"></system>
-               <value value="7e9bbd01-4e52-420d-b05b-48bc671d6708"></value>
+               <system value="https://tools.ietf.org/html/rfc4122"/>
+               <value value="7e9bbd01-4e52-420d-b05b-48bc671d6708"/>
             </identifier>
-            <status value="active"></status>
-            <intent value="order"></intent>
+            <status value="active"/>
+            <intent value="order"/>
             <code>
                <coding>
-                  <system value="http://snomed.info/sct"></system>
-                  <code value="26604007"></code>
-                  <display value="FBC - Full blood count"></display>
+                  <system value="http://snomed.info/sct"/>
+                  <code value="26604007"/>
+                  <display value="FBC - Full blood count"/>
                </coding>
             </code>
             <subject>
-               <reference value="Patient/8d6c2cd5-0eec-496a-88d0-3785a135df09"></reference>
-               <display value="REARDON, John"></display>
+               <reference value="Patient/8d6c2cd5-0eec-496a-88d0-3785a135df09"/>
+               <display value="REARDON, John"/>
             </subject>
             <requester>
                <agent>
-                  <reference value="Practitioner/f25e9d63-6a4e-4de6-b9dc-c912fda62b01"></reference>
-                  <display value="SMITH"></display>
+                  <reference value="Practitioner/f25e9d63-6a4e-4de6-b9dc-c912fda62b01"/>
+                  <display value="SMITH"/>
                </agent>
             </requester>
             <performer>
-               <reference value="Organization/d6407de7-0e86-45eb-93cb-035094aaa49e"></reference>
-               <display value="GREENTOWN GENERAL HOSPITAL"></display>
+               <reference value="Organization/d6407de7-0e86-45eb-93cb-035094aaa49e"/>
+               <display value="GREENTOWN GENERAL HOSPITAL"/>
             </performer>
             <note>
-               <text value="FBC"></text>
+               <text value="FBC"/>
             </note>
          </ProcedureRequest>
       </resource>
@@ -85,44 +85,44 @@
    <entry>
       <resource>
          <DiagnosticReport xmlns="http://hl7.org/fhir">
-            <id value="efae5859-28df-4e7d-be91-6df56d8215e4"></id>
+            <id value="efae5859-28df-4e7d-be91-6df56d8215e4"/>
             <meta>
-               <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-DiagnosticReport-1"></profile>
+               <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-DiagnosticReport-1"/>
             </meta>
             <identifier>
-               <system value="https://tools.ietf.org/html/rfc4122"></system>
-               <value value="1b663fc5-9dec-49c0-90ed-18a7cfa5a6b2"></value>
+               <system value="https://tools.ietf.org/html/rfc4122"/>
+               <value value="1b663fc5-9dec-49c0-90ed-18a7cfa5a6b2"/>
             </identifier>
             <basedOn>
-               <reference value="ProcedureRequest/d9df1431-22ac-462a-946a-f195f6c639af"></reference>
+               <reference value="ProcedureRequest/d9df1431-22ac-462a-946a-f195f6c639af"/>
             </basedOn>
-            <status value="final"></status>
+            <status value="final"/>
             <code>
                <coding>
-                  <system value="http://snomed.info/sct"></system>
-                  <code value="721981007"></code>
-                  <display value="Diagnostic studies report"></display>
+                  <system value="http://snomed.info/sct"/>
+                  <code value="721981007"/>
+                  <display value="Diagnostic studies report"/>
                </coding>
             </code>
             <subject>
-               <reference value="Patient/8d6c2cd5-0eec-496a-88d0-3785a135df09"></reference>
-               <display value="REARDON, John"></display>
+               <reference value="Patient/8d6c2cd5-0eec-496a-88d0-3785a135df09"/>
+               <display value="REARDON, John"/>
             </subject>
-            <issued value="2019-04-03T12:00:00+00:00"></issued>
+            <issued value="2019-04-03T12:00:00+00:00"/>
             <performer>
                <actor>
-                  <reference value="Organization/d6407de7-0e86-45eb-93cb-035094aaa49e"></reference>
-                  <display value="GREENTOWN GENERAL HOSPITAL"></display>
+                  <reference value="Organization/d6407de7-0e86-45eb-93cb-035094aaa49e"/>
+                  <display value="GREENTOWN GENERAL HOSPITAL"/>
                </actor>
             </performer>
             <specimen>
-               <reference value="Specimen/756a8361-79ce-4561-afcb-a91fe19df123"></reference>
+               <reference value="Specimen/756a8361-79ce-4561-afcb-a91fe19df123"/>
             </specimen>
             <result>
-               <reference value="Observation/7ec12071-b737-4ce8-8a91-2ea36d94464f"></reference>
+               <reference value="Observation/7ec12071-b737-4ce8-8a91-2ea36d94464f"/>
             </result>
             <result>
-               <reference value="Observation/dacb177a-9501-4dcc-8b22-b941791ae0db"></reference>
+               <reference value="Observation/dacb177a-9501-4dcc-8b22-b941791ae0db"/>
             </result>
          </DiagnosticReport>
       </resource>
@@ -130,61 +130,61 @@
    <entry>
        <resource>
        <Observation xmlns="http://hl7.org/fhir">
-         <id value="7ec12071-b737-4ce8-8a91-2ea36d94464f"></id>
+         <id value="7ec12071-b737-4ce8-8a91-2ea36d94464f"/>
          <meta>
-            <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Observation-1"></profile>
+            <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Observation-1"/>
          </meta>
          <identifier>
-            <system value="https://tools.ietf.org/html/rfc4122"></system>
-            <value value="f29457fd-eb4c-48d5-a911-8c2badd6e2bc"></value>
+            <system value="https://tools.ietf.org/html/rfc4122"/>
+            <value value="f29457fd-eb4c-48d5-a911-8c2badd6e2bc"/>
          </identifier>
-         <status value="unknown"></status>
+         <status value="unknown"/>
          <code>
             <coding>
-              <system value="http://snomed.info/sct"></system>
-              <code value="37331000000100"></code>
-              <display value="Comment note"></display>
+              <system value="http://snomed.info/sct"/>
+              <code value="37331000000100"/>
+              <display value="Comment note"/>
             </coding>
          </code>
          <subject>
-            <reference value="Patient/8d6c2cd5-0eec-496a-88d0-3785a135df09"></reference>
-            <display value="REARDON, John"></display>
+            <reference value="Patient/8d6c2cd5-0eec-496a-88d0-3785a135df09"/>
+            <display value="REARDON, John"/>
          </subject>
-         <issued value="2019-04-06T12:00:00+00:00"></issued>
+         <issued value="2019-04-06T12:00:00+00:00"/>
          <performer>
-            <reference value="Organization/d6407de7-0e86-45eb-93cb-035094aaa49e"></reference>
-            <display value="GREENTOWN GENERAL HOSPITAL"></display>
+            <reference value="Organization/d6407de7-0e86-45eb-93cb-035094aaa49e"/>
+            <display value="GREENTOWN GENERAL HOSPITAL"/>
          </performer>
-         <comment value="Some filing comments added at the GP practice"></comment>
+         <comment value="Some filing comments added at the GP practice"/>
        </Observation>
       </resource>
    </entry>
    <entry>
       <resource>
          <Specimen xmlns="http://hl7.org/fhir">
-            <id value="756a8361-79ce-4561-afcb-a91fe19df123"></id>
+            <id value="756a8361-79ce-4561-afcb-a91fe19df123"/>
             <meta>
-               <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Specimen-1"></profile>
+               <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Specimen-1"/>
             </meta>
             <identifier>
-               <system value="https://tools.ietf.org/html/rfc4122"></system>
-               <value value="1b663fc5-9dec-49c0-9eed-18a7cfa5a6b2"></value>
+               <system value="https://tools.ietf.org/html/rfc4122"/>
+               <value value="1b663fc5-9dec-49c0-9eed-18a7cfa5a6b2"/>
             </identifier>
-            <status value="available"></status>
+            <status value="available"/>
             <type>
                <coding>
-                  <system value="http://snomed.info/sct"></system>
-                  <code value="122555007"></code>
-                  <display value="Venous blood specimen"></display>
+                  <system value="http://snomed.info/sct"/>
+                  <code value="122555007"/>
+                  <display value="Venous blood specimen"/>
                </coding>
             </type>
             <subject>
-               <reference value="Patient/8d6c2cd5-0eec-496a-88d0-3785a135df09"></reference>
-               <display value="REARDON, John"></display>
+               <reference value="Patient/8d6c2cd5-0eec-496a-88d0-3785a135df09"/>
+               <display value="REARDON, John"/>
             </subject>
-            <receivedTime value="2017-11-01T15:00:00+00:00"></receivedTime>
+            <receivedTime value="2017-11-01T15:00:00+00:00"/>
             <collection>
-               <collectedDateTime value="2019-04-01T11:00:00+00:00"></collectedDateTime>
+               <collectedDateTime value="2019-04-01T11:00:00+00:00"/>
             </collection>
          </Specimen>
       </resource>
@@ -192,122 +192,122 @@
    <entry>
       <resource>
          <Observation xmlns="http://hl7.org/fhir">
-            <id value="dacb177a-9501-4dcc-8b22-b941791ae0db"></id>
+            <id value="dacb177a-9501-4dcc-8b22-b941791ae0db"/>
             <meta>
-               <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Observation-1"></profile>
+               <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Observation-1"/>
             </meta>
             <identifier>
-               <system value="https://tools.ietf.org/html/rfc4122"></system>
-               <value value="2af46949-4938-4c57-bad4-c4363e1965d5"></value>
+               <system value="https://tools.ietf.org/html/rfc4122"/>
+               <value value="2af46949-4938-4c57-bad4-c4363e1965d5"/>
             </identifier>
-            <status value="final"></status>
+            <status value="final"/>
             <code>
                <coding>
-                  <system value="http://snomed.info/sct"></system>
-                  <code value="26604007"></code>
-                  <display value="FBC - Full blood count"></display>
+                  <system value="http://snomed.info/sct"/>
+                  <code value="26604007"/>
+                  <display value="FBC - Full blood count"/>
                </coding>
             </code>
             <subject>
-               <reference value="Patient/8d6c2cd5-0eec-496a-88d0-3785a135df09"></reference>
-               <display value="REARDON, John"></display>
+               <reference value="Patient/8d6c2cd5-0eec-496a-88d0-3785a135df09"/>
+               <display value="REARDON, John"/>
             </subject>
-            <issued value="2019-04-06T12:00:00+00:00"></issued>
+            <issued value="2019-04-06T12:00:00+00:00"/>
             <performer>
-               <reference value="Organization/d6407de7-0e86-45eb-93cb-035094aaa49e"></reference>
-               <display value="GREENTOWN GENERAL HOSPITAL"></display>
+               <reference value="Organization/d6407de7-0e86-45eb-93cb-035094aaa49e"/>
+               <display value="GREENTOWN GENERAL HOSPITAL"/>
             </performer>
             <specimen>
-               <reference value="Specimen/756a8361-79ce-4561-afcb-a91fe19df123"></reference>
+               <reference value="Specimen/756a8361-79ce-4561-afcb-a91fe19df123"/>
             </specimen>
             <related>
                <target>
-                  <reference value="Observation/dacb177a-9501-4dcc-8b22-b941791ae0dc"></reference>
+                  <reference value="Observation/dacb177a-9501-4dcc-8b22-b941791ae0dc"/>
                </target>
             </related>
             <related>
                <target>
-                  <reference value="Observation/32685afe-1d46-4d98-8279-39b9e96ee914"></reference>
+                  <reference value="Observation/32685afe-1d46-4d98-8279-39b9e96ee914"/>
                </target>
             </related>
             <related>
                <target>
-                  <reference value="Observation/770b982d-be09-4744-a5d7-54e757947ffe"></reference>
+                  <reference value="Observation/770b982d-be09-4744-a5d7-54e757947ffe"/>
                </target>
             </related>
             <related>
                <target>
-                  <reference value="Observation/0a8aba3d-6b29-4dba-9c64-3a47516cc5eb"></reference>
+                  <reference value="Observation/0a8aba3d-6b29-4dba-9c64-3a47516cc5eb"/>
                </target>
             </related>
             <related>
                <target>
-                  <reference value="Observation/ddc43c3a-2863-4d6f-a926-162f5a4174b1"></reference>
+                  <reference value="Observation/ddc43c3a-2863-4d6f-a926-162f5a4174b1"/>
                </target>
             </related>
             <related>
                <target>
-                  <reference value="Observation/9825b7cf-de29-4c07-9b84-4af04dbf8233"></reference>
+                  <reference value="Observation/9825b7cf-de29-4c07-9b84-4af04dbf8233"/>
                </target>
             </related>
             <related>
                <target>
-                  <reference value="Observation/e732e681-3a89-4433-a37b-3767dd19d809"></reference>
+                  <reference value="Observation/e732e681-3a89-4433-a37b-3767dd19d809"/>
                </target>
             </related>
             <related>
                <target>
-                  <reference value="Observation/2a604bea-1ef4-4cb1-97a0-f2a160f12679"></reference>
+                  <reference value="Observation/2a604bea-1ef4-4cb1-97a0-f2a160f12679"/>
                </target>
             </related>
             <related>
                <target>
-                  <reference value="Observation/704b6bb2-a1c0-429b-b901-c641e70345ec"></reference>
+                  <reference value="Observation/704b6bb2-a1c0-429b-b901-c641e70345ec"/>
                </target>
             </related>
             <related>
                <target>
-                  <reference value="Observation/53f4132c-0168-4327-8d69-560b13f5bb4e"></reference>
+                  <reference value="Observation/53f4132c-0168-4327-8d69-560b13f5bb4e"/>
                </target>
             </related>
             <related>
                <target>
-                  <reference value="Observation/c9e03e92-78b8-4e8e-9785-cbd9424e9380"></reference>
+                  <reference value="Observation/c9e03e92-78b8-4e8e-9785-cbd9424e9380"/>
                </target>
             </related>
             <related>
                <target>
-                  <reference value="Observation/9c61ad77-8c17-41aa-b795-f0fcb9f983d5"></reference>
+                  <reference value="Observation/9c61ad77-8c17-41aa-b795-f0fcb9f983d5"/>
                </target>
             </related>
             <related>
                <target>
-                  <reference value="Observation/f67cb109-0890-4e47-9126-86da677c7008"></reference>
+                  <reference value="Observation/f67cb109-0890-4e47-9126-86da677c7008"/>
                </target>
             </related>
             <related>
                <target>
-                  <reference value="Observation/1f2e71db-b9aa-4e4f-9a78-87f99fefc8bf"></reference>
+                  <reference value="Observation/1f2e71db-b9aa-4e4f-9a78-87f99fefc8bf"/>
                </target>
             </related>
             <related>
                <target>
-                  <reference value="Observation/a23b563d-765a-4032-8dd3-c03178224f35"></reference>
+                  <reference value="Observation/a23b563d-765a-4032-8dd3-c03178224f35"/>
                </target>
             </related>
             <related>
                <target>
-                  <reference value="Observation/fedb7c2d-337c-435c-9169-612349783b5a"></reference>
+                  <reference value="Observation/fedb7c2d-337c-435c-9169-612349783b5a"/>
                </target>
             </related>
             <related>
                <target>
-                  <reference value="Observation/f9070943-7460-413a-a608-e15334b6e1d9"></reference>
+                  <reference value="Observation/f9070943-7460-413a-a608-e15334b6e1d9"/>
                </target>
             </related>
             <related>
                <target>
-                  <reference value="Observation/66acb40a-e241-474a-92b5-c74f9aa6a854"></reference>
+                  <reference value="Observation/66acb40a-e241-474a-92b5-c74f9aa6a854"/>
                </target>
             </related>
          </Observation>
@@ -316,51 +316,51 @@
    <entry>
       <resource>
          <Observation xmlns="http://hl7.org/fhir">
-            <id value="dacb177a-9501-4dcc-8b22-b941791ae0dc"></id>
+            <id value="dacb177a-9501-4dcc-8b22-b941791ae0dc"/>
             <meta>
-               <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Observation-1"></profile>
+               <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Observation-1"/>
             </meta>
             <identifier>
-               <system value="https://tools.ietf.org/html/rfc4122"></system>
-               <value value="2af46949-4938-4c57-bad4-c4363e1965d6"></value>
+               <system value="https://tools.ietf.org/html/rfc4122"/>
+               <value value="2af46949-4938-4c57-bad4-c4363e1965d6"/>
             </identifier>
-            <status value="final"></status>
+            <status value="final"/>
             <category>
                <coding>
-                  <system value="http://snomed.info/sct"></system>
-                  <code value="394595002"></code>
-                  <display value="Pathology"></display>
+                  <system value="http://snomed.info/sct"/>
+                  <code value="394595002"/>
+                  <display value="Pathology"/>
                </coding>
             </category>
             <code>
                <coding>
-                  <system value="http://snomed.info/sct"></system>
-                  <code value="1022541000000102"></code>
-                  <display value="Total white cell count"></display>
+                  <system value="http://snomed.info/sct"/>
+                  <code value="1022541000000102"/>
+                  <display value="Total white cell count"/>
                </coding>
             </code>
             <subject>
-               <reference value="Patient/8d6c2cd5-0eec-496a-88d0-3785a135df09"></reference>
-               <display value="REARDON, John"></display>
+               <reference value="Patient/8d6c2cd5-0eec-496a-88d0-3785a135df09"/>
+               <display value="REARDON, John"/>
             </subject>
-            <issued value="2019-04-06T12:00:00+00:00"></issued>
+            <issued value="2019-04-06T12:00:00+00:00"/>
             <performer>
-               <reference value="Organization/d6407de7-0e86-45eb-93cb-035094aaa49e"></reference>
-               <display value="GREENTOWN GENERAL HOSPITAL"></display>
+               <reference value="Organization/d6407de7-0e86-45eb-93cb-035094aaa49e"/>
+               <display value="GREENTOWN GENERAL HOSPITAL"/>
             </performer>
             <valueQuantity>
-               <value value="5.7000000000000002"></value>
-               <unit value="10*9/L"></unit>
+               <value value="5.7000000000000002"/>
+               <unit value="10*9/L"/>
             </valueQuantity>
             <specimen>
-               <reference value="Specimen/756a8361-79ce-4561-afcb-a91fe19df123"></reference>
+               <reference value="Specimen/756a8361-79ce-4561-afcb-a91fe19df123"/>
             </specimen>
             <referenceRange>
                <low>
-                  <value value="3.5"></value>
+                  <value value="3.5"/>
                </low>
                <high>
-                  <value value="11"></value>
+                  <value value="11"/>
                </high>
             </referenceRange>
          </Observation>
@@ -369,47 +369,47 @@
    <entry>
       <resource>
          <Observation xmlns="http://hl7.org/fhir">
-            <id value="32685afe-1d46-4d98-8279-39b9e96ee914"></id>
+            <id value="32685afe-1d46-4d98-8279-39b9e96ee914"/>
             <meta>
-               <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Observation-1"></profile>
+               <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Observation-1"/>
             </meta>
             <identifier>
-               <system value="https://tools.ietf.org/html/rfc4122"></system>
-               <value value="2af46949-4938-4c57-bad4-c4363e1965d7"></value>
+               <system value="https://tools.ietf.org/html/rfc4122"/>
+               <value value="2af46949-4938-4c57-bad4-c4363e1965d7"/>
             </identifier>
-            <status value="final"></status>
+            <status value="final"/>
             <category>
                <coding>
-                  <system value="http://snomed.info/sct"></system>
-                  <code value="394595002"></code>
-                  <display value="Pathology"></display>
+                  <system value="http://snomed.info/sct"/>
+                  <code value="394595002"/>
+                  <display value="Pathology"/>
                </coding>
             </category>
             <code>
                <coding>
-                  <system value="http://snomed.info/sct"></system>
-                  <code value="1022451000000103"></code>
-                  <display value="Red blood cell count"></display>
+                  <system value="http://snomed.info/sct"/>
+                  <code value="1022451000000103"/>
+                  <display value="Red blood cell count"/>
                </coding>
             </code>
             <subject>
-               <reference value="Patient/8d6c2cd5-0eec-496a-88d0-3785a135df09"></reference>
-               <display value="REARDON, John"></display>
+               <reference value="Patient/8d6c2cd5-0eec-496a-88d0-3785a135df09"/>
+               <display value="REARDON, John"/>
             </subject>
-            <issued value="2019-04-06T12:00:00+00:00"></issued>
+            <issued value="2019-04-06T12:00:00+00:00"/>
             <performer>
-               <reference value="Organization/d6407de7-0e86-45eb-93cb-035094aaa49e"></reference>
-               <display value="GREENTOWN GENERAL HOSPITAL"></display>
+               <reference value="Organization/d6407de7-0e86-45eb-93cb-035094aaa49e"/>
+               <display value="GREENTOWN GENERAL HOSPITAL"/>
             </performer>
             <valueQuantity>
-               <value value="4.5700000000000003"></value>
-               <unit value="10*12/L"></unit>
+               <value value="4.5700000000000003"/>
+               <unit value="10*12/L"/>
             </valueQuantity>
             <specimen>
-               <reference value="Specimen/756a8361-79ce-4561-afcb-a91fe19df123"></reference>
+               <reference value="Specimen/756a8361-79ce-4561-afcb-a91fe19df123"/>
             </specimen>
             <referenceRange>
-               <text value="less than 3.8 to 5"></text>
+               <text value="less than 3.8 to 5"/>
             </referenceRange>
          </Observation>
       </resource>
@@ -417,51 +417,51 @@
    <entry>
       <resource>
          <Observation xmlns="http://hl7.org/fhir">
-            <id value="770b982d-be09-4744-a5d7-54e757947ffe"></id>
+            <id value="770b982d-be09-4744-a5d7-54e757947ffe"/>
             <meta>
-               <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Observation-1"></profile>
+               <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Observation-1"/>
             </meta>
             <identifier>
-               <system value="https://tools.ietf.org/html/rfc4122"></system>
-               <value value="2af46949-4938-4c57-bad4-c4363e1965d8"></value>
+               <system value="https://tools.ietf.org/html/rfc4122"/>
+               <value value="2af46949-4938-4c57-bad4-c4363e1965d8"/>
             </identifier>
-            <status value="final"></status>
+            <status value="final"/>
             <category>
                <coding>
-                  <system value="http://snomed.info/sct"></system>
-                  <code value="394595002"></code>
-                  <display value="Pathology"></display>
+                  <system value="http://snomed.info/sct"/>
+                  <code value="394595002"/>
+                  <display value="Pathology"/>
                </coding>
             </category>
             <code>
                <coding>
-                  <system value="http://snomed.info/sct"></system>
-                  <code value="1022431000000105"></code>
-                  <display value="Haemoglobin estimation"></display>
+                  <system value="http://snomed.info/sct"/>
+                  <code value="1022431000000105"/>
+                  <display value="Haemoglobin estimation"/>
                </coding>
             </code>
             <subject>
-               <reference value="Patient/8d6c2cd5-0eec-496a-88d0-3785a135df09"></reference>
-               <display value="REARDON, John"></display>
+               <reference value="Patient/8d6c2cd5-0eec-496a-88d0-3785a135df09"/>
+               <display value="REARDON, John"/>
             </subject>
-            <issued value="2019-04-06T12:00:00+00:00"></issued>
+            <issued value="2019-04-06T12:00:00+00:00"/>
             <performer>
-               <reference value="Organization/d6407de7-0e86-45eb-93cb-035094aaa49e"></reference>
-               <display value="GREENTOWN GENERAL HOSPITAL"></display>
+               <reference value="Organization/d6407de7-0e86-45eb-93cb-035094aaa49e"/>
+               <display value="GREENTOWN GENERAL HOSPITAL"/>
             </performer>
             <valueQuantity>
-               <value value="142"></value>
-               <unit value="g/dL"></unit>
+               <value value="142"/>
+               <unit value="g/dL"/>
             </valueQuantity>
             <specimen>
-               <reference value="Specimen/756a8361-79ce-4561-afcb-a91fe19df123"></reference>
+               <reference value="Specimen/756a8361-79ce-4561-afcb-a91fe19df123"/>
             </specimen>
             <referenceRange>
                <low>
-                  <value value="115"></value>
+                  <value value="115"/>
                </low>
                <high>
-                  <value value="150"></value>
+                  <value value="150"/>
                </high>
             </referenceRange>
          </Observation>
@@ -470,47 +470,47 @@
    <entry>
       <resource>
          <Observation xmlns="http://hl7.org/fhir">
-            <id value="0a8aba3d-6b29-4dba-9c64-3a47516cc5eb"></id>
+            <id value="0a8aba3d-6b29-4dba-9c64-3a47516cc5eb"/>
             <meta>
-               <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Observation-1"></profile>
+               <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Observation-1"/>
             </meta>
             <identifier>
-               <system value="https://tools.ietf.org/html/rfc4122"></system>
-               <value value="2af46949-4938-4c57-bad4-c4363e1965d9"></value>
+               <system value="https://tools.ietf.org/html/rfc4122"/>
+               <value value="2af46949-4938-4c57-bad4-c4363e1965d9"/>
             </identifier>
-            <status value="final"></status>
+            <status value="final"/>
             <category>
                <coding>
-                  <system value="http://snomed.info/sct"></system>
-                  <code value="394595002"></code>
-                  <display value="Pathology"></display>
+                  <system value="http://snomed.info/sct"/>
+                  <code value="394595002"/>
+                  <display value="Pathology"/>
                </coding>
             </category>
             <code>
                <coding>
-                  <system value="http://snomed.info/sct"></system>
-                  <code value="1022291000000105"></code>
-                  <display value="Haematocrit"></display>
+                  <system value="http://snomed.info/sct"/>
+                  <code value="1022291000000105"/>
+                  <display value="Haematocrit"/>
                </coding>
             </code>
             <subject>
-               <reference value="Patient/8d6c2cd5-0eec-496a-88d0-3785a135df09"></reference>
-               <display value="REARDON, John"></display>
+               <reference value="Patient/8d6c2cd5-0eec-496a-88d0-3785a135df09"/>
+               <display value="REARDON, John"/>
             </subject>
-            <issued value="2019-04-06T12:00:00+00:00"></issued>
+            <issued value="2019-04-06T12:00:00+00:00"/>
             <performer>
-               <reference value="Organization/d6407de7-0e86-45eb-93cb-035094aaa49e"></reference>
-               <display value="GREENTOWN GENERAL HOSPITAL"></display>
+               <reference value="Organization/d6407de7-0e86-45eb-93cb-035094aaa49e"/>
+               <display value="GREENTOWN GENERAL HOSPITAL"/>
             </performer>
             <valueQuantity>
-               <value value="0.42699999999999999"></value>
-               <unit value="%"></unit>
+               <value value="0.42699999999999999"/>
+               <unit value="%"/>
             </valueQuantity>
             <specimen>
-               <reference value="Specimen/756a8361-79ce-4561-afcb-a91fe19df123"></reference>
+               <reference value="Specimen/756a8361-79ce-4561-afcb-a91fe19df123"/>
             </specimen>
             <referenceRange>
-               <text value="greater than 0.36 and less than 0.46"></text>
+               <text value="greater than 0.36 and less than 0.46"/>
             </referenceRange>
          </Observation>
       </resource>
@@ -518,51 +518,51 @@
    <entry>
       <resource>
          <Observation xmlns="http://hl7.org/fhir">
-            <id value="ddc43c3a-2863-4d6f-a926-162f5a4174b1"></id>
+            <id value="ddc43c3a-2863-4d6f-a926-162f5a4174b1"/>
             <meta>
-               <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Observation-1"></profile>
+               <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Observation-1"/>
             </meta>
             <identifier>
-               <system value="https://tools.ietf.org/html/rfc4122"></system>
-               <value value="2af46949-4938-4c57-bad4-c4363e1965da"></value>
+               <system value="https://tools.ietf.org/html/rfc4122"/>
+               <value value="2af46949-4938-4c57-bad4-c4363e1965da"/>
             </identifier>
-            <status value="final"></status>
+            <status value="final"/>
             <category>
                <coding>
-                  <system value="http://snomed.info/sct"></system>
-                  <code value="394595002"></code>
-                  <display value="Pathology"></display>
+                  <system value="http://snomed.info/sct"/>
+                  <code value="394595002"/>
+                  <display value="Pathology"/>
                </coding>
             </category>
             <code>
                <coding>
-                  <system value="http://snomed.info/sct"></system>
-                  <code value="1022491000000106"></code>
-                  <display value="Mean corpuscular volume"></display>
+                  <system value="http://snomed.info/sct"/>
+                  <code value="1022491000000106"/>
+                  <display value="Mean corpuscular volume"/>
                </coding>
             </code>
             <subject>
-               <reference value="Patient/8d6c2cd5-0eec-496a-88d0-3785a135df09"></reference>
-               <display value="REARDON, John"></display>
+               <reference value="Patient/8d6c2cd5-0eec-496a-88d0-3785a135df09"/>
+               <display value="REARDON, John"/>
             </subject>
-            <issued value="2019-04-06T12:00:00+00:00"></issued>
+            <issued value="2019-04-06T12:00:00+00:00"/>
             <performer>
-               <reference value="Organization/d6407de7-0e86-45eb-93cb-035094aaa49e"></reference>
-               <display value="GREENTOWN GENERAL HOSPITAL"></display>
+               <reference value="Organization/d6407de7-0e86-45eb-93cb-035094aaa49e"/>
+               <display value="GREENTOWN GENERAL HOSPITAL"/>
             </performer>
             <valueQuantity>
-               <value value="93.400000000000006"></value>
-               <unit value="fL"></unit>
+               <value value="93.400000000000006"/>
+               <unit value="fL"/>
             </valueQuantity>
             <specimen>
-               <reference value="Specimen/756a8361-79ce-4561-afcb-a91fe19df123"></reference>
+               <reference value="Specimen/756a8361-79ce-4561-afcb-a91fe19df123"/>
             </specimen>
             <referenceRange>
                <low>
-                  <value value="80"></value>
+                  <value value="80"/>
                </low>
                <high>
-                  <value value="99"></value>
+                  <value value="99"/>
                </high>
             </referenceRange>
          </Observation>
@@ -571,51 +571,51 @@
    <entry>
       <resource>
          <Observation xmlns="http://hl7.org/fhir">
-            <id value="9825b7cf-de29-4c07-9b84-4af04dbf8233"></id>
+            <id value="9825b7cf-de29-4c07-9b84-4af04dbf8233"/>
             <meta>
-               <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Observation-1"></profile>
+               <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Observation-1"/>
             </meta>
             <identifier>
-               <system value="https://tools.ietf.org/html/rfc4122"></system>
-               <value value="2af46949-4938-4c57-bad4-c4363e1965db"></value>
+               <system value="https://tools.ietf.org/html/rfc4122"/>
+               <value value="2af46949-4938-4c57-bad4-c4363e1965db"/>
             </identifier>
-            <status value="final"></status>
+            <status value="final"/>
             <category>
                <coding>
-                  <system value="http://snomed.info/sct"></system>
-                  <code value="394595002"></code>
-                  <display value="Pathology"></display>
+                  <system value="http://snomed.info/sct"/>
+                  <code value="394595002"/>
+                  <display value="Pathology"/>
                </coding>
             </category>
             <code>
                <coding>
-                  <system value="http://snomed.info/sct"></system>
-                  <code value="1022471000000107"></code>
-                  <display value="Mean corpuscular haemoglobin"></display>
+                  <system value="http://snomed.info/sct"/>
+                  <code value="1022471000000107"/>
+                  <display value="Mean corpuscular haemoglobin"/>
                </coding>
             </code>
             <subject>
-               <reference value="Patient/8d6c2cd5-0eec-496a-88d0-3785a135df09"></reference>
-               <display value="REARDON, John"></display>
+               <reference value="Patient/8d6c2cd5-0eec-496a-88d0-3785a135df09"/>
+               <display value="REARDON, John"/>
             </subject>
-            <issued value="2019-04-06T12:00:00+00:00"></issued>
+            <issued value="2019-04-06T12:00:00+00:00"/>
             <performer>
-               <reference value="Organization/d6407de7-0e86-45eb-93cb-035094aaa49e"></reference>
-               <display value="GREENTOWN GENERAL HOSPITAL"></display>
+               <reference value="Organization/d6407de7-0e86-45eb-93cb-035094aaa49e"/>
+               <display value="GREENTOWN GENERAL HOSPITAL"/>
             </performer>
             <valueQuantity>
-               <value value="31.100000000000001"></value>
-               <unit value="pg"></unit>
+               <value value="31.100000000000001"/>
+               <unit value="pg"/>
             </valueQuantity>
             <specimen>
-               <reference value="Specimen/756a8361-79ce-4561-afcb-a91fe19df123"></reference>
+               <reference value="Specimen/756a8361-79ce-4561-afcb-a91fe19df123"/>
             </specimen>
             <referenceRange>
                <low>
-                  <value value="27.5"></value>
+                  <value value="27.5"/>
                </low>
                <high>
-                  <value value="32.5"></value>
+                  <value value="32.5"/>
                </high>
             </referenceRange>
          </Observation>
@@ -624,51 +624,51 @@
    <entry>
       <resource>
          <Observation xmlns="http://hl7.org/fhir">
-            <id value="e732e681-3a89-4433-a37b-3767dd19d809"></id>
+            <id value="e732e681-3a89-4433-a37b-3767dd19d809"/>
             <meta>
-               <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Observation-1"></profile>
+               <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Observation-1"/>
             </meta>
             <identifier>
-               <system value="https://tools.ietf.org/html/rfc4122"></system>
-               <value value="2af46949-4938-4c57-bad4-c4363e1965dc"></value>
+               <system value="https://tools.ietf.org/html/rfc4122"/>
+               <value value="2af46949-4938-4c57-bad4-c4363e1965dc"/>
             </identifier>
-            <status value="final"></status>
+            <status value="final"/>
             <category>
                <coding>
-                  <system value="http://snomed.info/sct"></system>
-                  <code value="394595002"></code>
-                  <display value="Pathology"></display>
+                  <system value="http://snomed.info/sct"/>
+                  <code value="394595002"/>
+                  <display value="Pathology"/>
                </coding>
             </category>
             <code>
                <coding>
-                  <system value="http://snomed.info/sct"></system>
-                  <code value="1022481000000109"></code>
-                  <display value="Mean corpuscular haemoglobin concentration"></display>
+                  <system value="http://snomed.info/sct"/>
+                  <code value="1022481000000109"/>
+                  <display value="Mean corpuscular haemoglobin concentration"/>
                </coding>
             </code>
             <subject>
-               <reference value="Patient/8d6c2cd5-0eec-496a-88d0-3785a135df09"></reference>
-               <display value="REARDON, John"></display>
+               <reference value="Patient/8d6c2cd5-0eec-496a-88d0-3785a135df09"/>
+               <display value="REARDON, John"/>
             </subject>
-            <issued value="2019-04-06T12:00:00+00:00"></issued>
+            <issued value="2019-04-06T12:00:00+00:00"/>
             <performer>
-               <reference value="Organization/d6407de7-0e86-45eb-93cb-035094aaa49e"></reference>
-               <display value="GREENTOWN GENERAL HOSPITAL"></display>
+               <reference value="Organization/d6407de7-0e86-45eb-93cb-035094aaa49e"/>
+               <display value="GREENTOWN GENERAL HOSPITAL"/>
             </performer>
             <valueQuantity>
-               <value value="333"></value>
-               <unit value="g/dL"></unit>
+               <value value="333"/>
+               <unit value="g/dL"/>
             </valueQuantity>
             <specimen>
-               <reference value="Specimen/756a8361-79ce-4561-afcb-a91fe19df123"></reference>
+               <reference value="Specimen/756a8361-79ce-4561-afcb-a91fe19df123"/>
             </specimen>
             <referenceRange>
                <low>
-                  <value value="310"></value>
+                  <value value="310"/>
                </low>
                <high>
-                  <value value="350"></value>
+                  <value value="350"/>
                </high>
             </referenceRange>
          </Observation>
@@ -677,51 +677,51 @@
    <entry>
       <resource>
          <Observation xmlns="http://hl7.org/fhir">
-            <id value="2a604bea-1ef4-4cb1-97a0-f2a160f12679"></id>
+            <id value="2a604bea-1ef4-4cb1-97a0-f2a160f12679"/>
             <meta>
-               <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Observation-1"></profile>
+               <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Observation-1"/>
             </meta>
             <identifier>
-               <system value="https://tools.ietf.org/html/rfc4122"></system>
-               <value value="2af46949-4938-4c57-bad4-c4363e1965dd"></value>
+               <system value="https://tools.ietf.org/html/rfc4122"/>
+               <value value="2af46949-4938-4c57-bad4-c4363e1965dd"/>
             </identifier>
-            <status value="final"></status>
+            <status value="final"/>
             <category>
                <coding>
-                  <system value="http://snomed.info/sct"></system>
-                  <code value="394595002"></code>
-                  <display value="Pathology"></display>
+                  <system value="http://snomed.info/sct"/>
+                  <code value="394595002"/>
+                  <display value="Pathology"/>
                </coding>
             </category>
             <code>
                <coding>
-                  <system value="http://snomed.info/sct"></system>
-                  <code value="1022651000000100"></code>
-                  <display value="Platelet count"></display>
+                  <system value="http://snomed.info/sct"/>
+                  <code value="1022651000000100"/>
+                  <display value="Platelet count"/>
                </coding>
             </code>
             <subject>
-               <reference value="Patient/8d6c2cd5-0eec-496a-88d0-3785a135df09"></reference>
-               <display value="REARDON, John"></display>
+               <reference value="Patient/8d6c2cd5-0eec-496a-88d0-3785a135df09"/>
+               <display value="REARDON, John"/>
             </subject>
-            <issued value="2019-04-06T12:00:00+00:00"></issued>
+            <issued value="2019-04-06T12:00:00+00:00"/>
             <performer>
-               <reference value="Organization/d6407de7-0e86-45eb-93cb-035094aaa49e"></reference>
-               <display value="GREENTOWN GENERAL HOSPITAL"></display>
+               <reference value="Organization/d6407de7-0e86-45eb-93cb-035094aaa49e"/>
+               <display value="GREENTOWN GENERAL HOSPITAL"/>
             </performer>
             <valueQuantity>
-               <value value="206"></value>
-               <unit value="10*9/L"></unit>
+               <value value="206"/>
+               <unit value="10*9/L"/>
             </valueQuantity>
             <specimen>
-               <reference value="Specimen/756a8361-79ce-4561-afcb-a91fe19df123"></reference>
+               <reference value="Specimen/756a8361-79ce-4561-afcb-a91fe19df123"/>
             </specimen>
             <referenceRange>
                <low>
-                  <value value="140"></value>
+                  <value value="140"/>
                </low>
                <high>
-                  <value value="400"></value>
+                  <value value="400"/>
                </high>
             </referenceRange>
          </Observation>
@@ -730,51 +730,51 @@
    <entry>
       <resource>
          <Observation xmlns="http://hl7.org/fhir">
-            <id value="704b6bb2-a1c0-429b-b901-c641e70345ec"></id>
+            <id value="704b6bb2-a1c0-429b-b901-c641e70345ec"/>
             <meta>
-               <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Observation-1"></profile>
+               <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Observation-1"/>
             </meta>
             <identifier>
-               <system value="https://tools.ietf.org/html/rfc4122"></system>
-               <value value="2af46949-4938-4c57-bad4-c4363e1965de"></value>
+               <system value="https://tools.ietf.org/html/rfc4122"/>
+               <value value="2af46949-4938-4c57-bad4-c4363e1965de"/>
             </identifier>
-            <status value="final"></status>
+            <status value="final"/>
             <category>
                <coding>
-                  <system value="http://snomed.info/sct"></system>
-                  <code value="394595002"></code>
-                  <display value="Pathology"></display>
+                  <system value="http://snomed.info/sct"/>
+                  <code value="394595002"/>
+                  <display value="Pathology"/>
                </coding>
             </category>
             <code>
                <coding>
-                  <system value="http://snomed.info/sct"></system>
-                  <code value="1022551000000104"></code>
-                  <display value="Neutrophil count"></display>
+                  <system value="http://snomed.info/sct"/>
+                  <code value="1022551000000104"/>
+                  <display value="Neutrophil count"/>
                </coding>
             </code>
             <subject>
-               <reference value="Patient/8d6c2cd5-0eec-496a-88d0-3785a135df09"></reference>
-               <display value="REARDON, John"></display>
+               <reference value="Patient/8d6c2cd5-0eec-496a-88d0-3785a135df09"/>
+               <display value="REARDON, John"/>
             </subject>
-            <issued value="2019-04-06T12:00:00+00:00"></issued>
+            <issued value="2019-04-06T12:00:00+00:00"/>
             <performer>
-               <reference value="Organization/d6407de7-0e86-45eb-93cb-035094aaa49e"></reference>
-               <display value="GREENTOWN GENERAL HOSPITAL"></display>
+               <reference value="Organization/d6407de7-0e86-45eb-93cb-035094aaa49e"/>
+               <display value="GREENTOWN GENERAL HOSPITAL"/>
             </performer>
             <valueQuantity>
-               <value value="2.7599999999999998"></value>
-               <unit value="10*9/L"></unit>
+               <value value="2.7599999999999998"/>
+               <unit value="10*9/L"/>
             </valueQuantity>
             <specimen>
-               <reference value="Specimen/756a8361-79ce-4561-afcb-a91fe19df123"></reference>
+               <reference value="Specimen/756a8361-79ce-4561-afcb-a91fe19df123"/>
             </specimen>
             <referenceRange>
                <low>
-                  <value value="1.7"></value>
+                  <value value="1.7"/>
                </low>
                <high>
-                  <value value="8"></value>
+                  <value value="8"/>
                </high>
             </referenceRange>
          </Observation>
@@ -783,44 +783,44 @@
    <entry>
       <resource>
          <Observation xmlns="http://hl7.org/fhir">
-            <id value="53f4132c-0168-4327-8d69-560b13f5bb4e"></id>
+            <id value="53f4132c-0168-4327-8d69-560b13f5bb4e"/>
             <meta>
-               <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Observation-1"></profile>
+               <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Observation-1"/>
             </meta>
             <identifier>
-               <system value="https://tools.ietf.org/html/rfc4122"></system>
-               <value value="2af46949-4938-4c57-bad4-c4363e1965df"></value>
+               <system value="https://tools.ietf.org/html/rfc4122"/>
+               <value value="2af46949-4938-4c57-bad4-c4363e1965df"/>
             </identifier>
-            <status value="final"></status>
+            <status value="final"/>
             <category>
                <coding>
-                  <system value="http://snomed.info/sct"></system>
-                  <code value="394595002"></code>
-                  <display value="Pathology"></display>
+                  <system value="http://snomed.info/sct"/>
+                  <code value="394595002"/>
+                  <display value="Pathology"/>
                </coding>
             </category>
             <code>
                <coding>
-                  <system value="http://snomed.info/sct"></system>
-                  <code value="1015471000000105"></code>
-                  <display value="Percentage neutrophils"></display>
+                  <system value="http://snomed.info/sct"/>
+                  <code value="1015471000000105"/>
+                  <display value="Percentage neutrophils"/>
                </coding>
             </code>
             <subject>
-               <reference value="Patient/8d6c2cd5-0eec-496a-88d0-3785a135df09"></reference>
-               <display value="REARDON, John"></display>
+               <reference value="Patient/8d6c2cd5-0eec-496a-88d0-3785a135df09"/>
+               <display value="REARDON, John"/>
             </subject>
-            <issued value="2019-04-06T12:00:00+00:00"></issued>
+            <issued value="2019-04-06T12:00:00+00:00"/>
             <performer>
-               <reference value="Organization/d6407de7-0e86-45eb-93cb-035094aaa49e"></reference>
-               <display value="ST JAMES'S UNIVERSITY HOSPITAL"></display>
+               <reference value="Organization/d6407de7-0e86-45eb-93cb-035094aaa49e"/>
+               <display value="ST JAMES'S UNIVERSITY HOSPITAL"/>
             </performer>
             <valueQuantity>
-               <value value="77.700000000000003"></value>
-               <unit value="%"></unit>
+               <value value="77.700000000000003"/>
+               <unit value="%"/>
             </valueQuantity>
             <specimen>
-               <reference value="Specimen/756a8361-79ce-4561-afcb-a91fe19df123"></reference>
+               <reference value="Specimen/756a8361-79ce-4561-afcb-a91fe19df123"/>
             </specimen>
          </Observation>
       </resource>
@@ -828,51 +828,51 @@
    <entry>
       <resource>
          <Observation xmlns="http://hl7.org/fhir">
-            <id value="c9e03e92-78b8-4e8e-9785-cbd9424e9380"></id>
+            <id value="c9e03e92-78b8-4e8e-9785-cbd9424e9380"/>
             <meta>
-               <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Observation-1"></profile>
+               <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Observation-1"/>
             </meta>
             <identifier>
-               <system value="https://tools.ietf.org/html/rfc4122"></system>
-               <value value="2af46949-4938-4c57-bad4-c4363e1965e0"></value>
+               <system value="https://tools.ietf.org/html/rfc4122"/>
+               <value value="2af46949-4938-4c57-bad4-c4363e1965e0"/>
             </identifier>
-            <status value="final"></status>
+            <status value="final"/>
             <category>
                <coding>
-                  <system value="http://snomed.info/sct"></system>
-                  <code value="394595002"></code>
-                  <display value="Pathology"></display>
+                  <system value="http://snomed.info/sct"/>
+                  <code value="394595002"/>
+                  <display value="Pathology"/>
                </coding>
             </category>
             <code>
                <coding>
-                  <system value="http://snomed.info/sct"></system>
-                  <code value="1022581000000105"></code>
-                  <display value="Lymphocyte count"></display>
+                  <system value="http://snomed.info/sct"/>
+                  <code value="1022581000000105"/>
+                  <display value="Lymphocyte count"/>
                </coding>
             </code>
             <subject>
-               <reference value="Patient/8d6c2cd5-0eec-496a-88d0-3785a135df09"></reference>
-               <display value="REARDON, John"></display>
+               <reference value="Patient/8d6c2cd5-0eec-496a-88d0-3785a135df09"/>
+               <display value="REARDON, John"/>
             </subject>
-            <issued value="2019-04-06T12:00:00+00:00"></issued>
+            <issued value="2019-04-06T12:00:00+00:00"/>
             <performer>
-               <reference value="Organization/d6407de7-0e86-45eb-93cb-035094aaa49e"></reference>
-               <display value="GREENTOWN GENERAL HOSPITAL"></display>
+               <reference value="Organization/d6407de7-0e86-45eb-93cb-035094aaa49e"/>
+               <display value="GREENTOWN GENERAL HOSPITAL"/>
             </performer>
             <valueQuantity>
-               <value value="2.1200000000000001"></value>
-               <unit value="10*9/L"></unit>
+               <value value="2.1200000000000001"/>
+               <unit value="10*9/L"/>
             </valueQuantity>
             <specimen>
-               <reference value="Specimen/756a8361-79ce-4561-afcb-a91fe19df123"></reference>
+               <reference value="Specimen/756a8361-79ce-4561-afcb-a91fe19df123"/>
             </specimen>
             <referenceRange>
                <low>
-                  <value value="1"></value>
+                  <value value="1"/>
                </low>
                <high>
-                  <value value="4"></value>
+                  <value value="4"/>
                </high>
             </referenceRange>
          </Observation>
@@ -881,44 +881,44 @@
    <entry>
       <resource>
          <Observation xmlns="http://hl7.org/fhir">
-            <id value="9c61ad77-8c17-41aa-b795-f0fcb9f983d5"></id>
+            <id value="9c61ad77-8c17-41aa-b795-f0fcb9f983d5"/>
             <meta>
-               <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Observation-1"></profile>
+               <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Observation-1"/>
             </meta>
             <identifier>
-               <system value="https://tools.ietf.org/html/rfc4122"></system>
-               <value value="2af46949-4938-4c57-bad4-c4363e1965e1"></value>
+               <system value="https://tools.ietf.org/html/rfc4122"/>
+               <value value="2af46949-4938-4c57-bad4-c4363e1965e1"/>
             </identifier>
-            <status value="final"></status>
+            <status value="final"/>
             <category>
                <coding>
-                  <system value="http://snomed.info/sct"></system>
-                  <code value="394595002"></code>
-                  <display value="Pathology"></display>
+                  <system value="http://snomed.info/sct"/>
+                  <code value="394595002"/>
+                  <display value="Pathology"/>
                </coding>
             </category>
             <code>
                <coding>
-                  <system value="http://snomed.info/sct"></system>
-                  <code value="1015481000000107"></code>
-                  <display value="Percentage lymphocytes"></display>
+                  <system value="http://snomed.info/sct"/>
+                  <code value="1015481000000107"/>
+                  <display value="Percentage lymphocytes"/>
                </coding>
             </code>
             <subject>
-               <reference value="Patient/8d6c2cd5-0eec-496a-88d0-3785a135df09"></reference>
-               <display value="REARDON, John"></display>
+               <reference value="Patient/8d6c2cd5-0eec-496a-88d0-3785a135df09"/>
+               <display value="REARDON, John"/>
             </subject>
-            <issued value="2019-04-06T12:00:00+00:00"></issued>
+            <issued value="2019-04-06T12:00:00+00:00"/>
             <performer>
-               <reference value="Organization/d6407de7-0e86-45eb-93cb-035094aaa49e"></reference>
-               <display value="GREENTOWN GENERAL HOSPITAL"></display>
+               <reference value="Organization/d6407de7-0e86-45eb-93cb-035094aaa49e"/>
+               <display value="GREENTOWN GENERAL HOSPITAL"/>
             </performer>
             <valueQuantity>
-               <value value="14.300000000000001"></value>
-               <unit value="%"></unit>
+               <value value="14.300000000000001"/>
+               <unit value="%"/>
             </valueQuantity>
             <specimen>
-               <reference value="Specimen/756a8361-79ce-4561-afcb-a91fe19df123"></reference>
+               <reference value="Specimen/756a8361-79ce-4561-afcb-a91fe19df123"/>
             </specimen>
          </Observation>
       </resource>
@@ -926,47 +926,47 @@
    <entry>
       <resource>
          <Observation xmlns="http://hl7.org/fhir">
-            <id value="f67cb109-0890-4e47-9126-86da677c7008"></id>
+            <id value="f67cb109-0890-4e47-9126-86da677c7008"/>
             <meta>
-               <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Observation-1"></profile>
+               <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Observation-1"/>
             </meta>
             <identifier>
-               <system value="https://tools.ietf.org/html/rfc4122"></system>
-               <value value="2af46949-4938-4c57-bad4-c4363e1965e2"></value>
+               <system value="https://tools.ietf.org/html/rfc4122"/>
+               <value value="2af46949-4938-4c57-bad4-c4363e1965e2"/>
             </identifier>
-            <status value="final"></status>
+            <status value="final"/>
             <category>
                <coding>
-                  <system value="http://snomed.info/sct"></system>
-                  <code value="394595002"></code>
-                  <display value="Pathology"></display>
+                  <system value="http://snomed.info/sct"/>
+                  <code value="394595002"/>
+                  <display value="Pathology"/>
                </coding>
             </category>
             <code>
                <coding>
-                  <system value="http://snomed.info/sct"></system>
-                  <code value="1022591000000107"></code>
-                  <display value="Monocyte count"></display>
+                  <system value="http://snomed.info/sct"/>
+                  <code value="1022591000000107"/>
+                  <display value="Monocyte count"/>
                </coding>
             </code>
             <subject>
-               <reference value="Patient/8d6c2cd5-0eec-496a-88d0-3785a135df09"></reference>
-               <display value="REARDON, John"></display>
+               <reference value="Patient/8d6c2cd5-0eec-496a-88d0-3785a135df09"/>
+               <display value="REARDON, John"/>
             </subject>
-            <issued value="2019-04-06T12:00:00+00:00"></issued>
+            <issued value="2019-04-06T12:00:00+00:00"/>
             <performer>
-               <reference value="Organization/d6407de7-0e86-45eb-93cb-035094aaa49e"></reference>
-               <display value="GREENTOWN GENERAL HOSPITAL"></display>
+               <reference value="Organization/d6407de7-0e86-45eb-93cb-035094aaa49e"/>
+               <display value="GREENTOWN GENERAL HOSPITAL"/>
             </performer>
             <valueQuantity>
-               <value value="0.47999999999999998"></value>
-               <unit value="10*9/L"></unit>
+               <value value="0.47999999999999998"/>
+               <unit value="10*9/L"/>
             </valueQuantity>
             <specimen>
-               <reference value="Specimen/756a8361-79ce-4561-afcb-a91fe19df123"></reference>
+               <reference value="Specimen/756a8361-79ce-4561-afcb-a91fe19df123"/>
             </specimen>
             <referenceRange>
-               <text value="greater than 0.2 to greater than 0.8"></text>
+               <text value="greater than 0.2 to greater than 0.8"/>
             </referenceRange>
          </Observation>
       </resource>
@@ -974,44 +974,44 @@
    <entry>
       <resource>
          <Observation xmlns="http://hl7.org/fhir">
-            <id value="1f2e71db-b9aa-4e4f-9a78-87f99fefc8bf"></id>
+            <id value="1f2e71db-b9aa-4e4f-9a78-87f99fefc8bf"/>
             <meta>
-               <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Observation-1"></profile>
+               <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Observation-1"/>
             </meta>
             <identifier>
-               <system value="https://tools.ietf.org/html/rfc4122"></system>
-               <value value="2af46949-4938-4c57-bad4-c4363e1965e3"></value>
+               <system value="https://tools.ietf.org/html/rfc4122"/>
+               <value value="2af46949-4938-4c57-bad4-c4363e1965e3"/>
             </identifier>
-            <status value="final"></status>
+            <status value="final"/>
             <category>
                <coding>
-                  <system value="http://snomed.info/sct"></system>
-                  <code value="394595002"></code>
-                  <display value="Pathology"></display>
+                  <system value="http://snomed.info/sct"/>
+                  <code value="394595002"/>
+                  <display value="Pathology"/>
                </coding>
             </category>
             <code>
                <coding>
-                  <system value="http://snomed.info/sct"></system>
-                  <code value="1015491000000109"></code>
-                  <display value="Percentage monocytes"></display>
+                  <system value="http://snomed.info/sct"/>
+                  <code value="1015491000000109"/>
+                  <display value="Percentage monocytes"/>
                </coding>
             </code>
             <subject>
-               <reference value="Patient/8d6c2cd5-0eec-496a-88d0-3785a135df09"></reference>
-               <display value="REARDON, John"></display>
+               <reference value="Patient/8d6c2cd5-0eec-496a-88d0-3785a135df09"/>
+               <display value="REARDON, John"/>
             </subject>
-            <issued value="2019-04-06T12:00:00+00:00"></issued>
+            <issued value="2019-04-06T12:00:00+00:00"/>
             <performer>
-               <reference value="Organization/d6407de7-0e86-45eb-93cb-035094aaa49e"></reference>
-               <display value="GREENTOWN GENERAL HOSPITAL"></display>
+               <reference value="Organization/d6407de7-0e86-45eb-93cb-035094aaa49e"/>
+               <display value="GREENTOWN GENERAL HOSPITAL"/>
             </performer>
             <valueQuantity>
-               <value value="7.0999999999999996"></value>
-               <unit value="%"></unit>
+               <value value="7.0999999999999996"/>
+               <unit value="%"/>
             </valueQuantity>
             <specimen>
-               <reference value="Specimen/756a8361-79ce-4561-afcb-a91fe19df123"></reference>
+               <reference value="Specimen/756a8361-79ce-4561-afcb-a91fe19df123"/>
             </specimen>
          </Observation>
       </resource>
@@ -1019,47 +1019,47 @@
    <entry>
       <resource>
          <Observation xmlns="http://hl7.org/fhir">
-            <id value="a23b563d-765a-4032-8dd3-c03178224f35"></id>
+            <id value="a23b563d-765a-4032-8dd3-c03178224f35"/>
             <meta>
-               <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Observation-1"></profile>
+               <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Observation-1"/>
             </meta>
             <identifier>
-               <system value="https://tools.ietf.org/html/rfc4122"></system>
-               <value value="2af46949-4938-4c57-bad4-c4363e1965e4"></value>
+               <system value="https://tools.ietf.org/html/rfc4122"/>
+               <value value="2af46949-4938-4c57-bad4-c4363e1965e4"/>
             </identifier>
-            <status value="final"></status>
+            <status value="final"/>
             <category>
                <coding>
-                  <system value="http://snomed.info/sct"></system>
-                  <code value="394595002"></code>
-                  <display value="Pathology"></display>
+                  <system value="http://snomed.info/sct"/>
+                  <code value="394595002"/>
+                  <display value="Pathology"/>
                </coding>
             </category>
             <code>
                <coding>
-                  <system value="http://snomed.info/sct"></system>
-                  <code value="1022561000000101"></code>
-                  <display value="Eosinophil count"></display>
+                  <system value="http://snomed.info/sct"/>
+                  <code value="1022561000000101"/>
+                  <display value="Eosinophil count"/>
                </coding>
             </code>
             <subject>
-               <reference value="Patient/8d6c2cd5-0eec-496a-88d0-3785a135df09"></reference>
-               <display value="REARDON, John"></display>
+               <reference value="Patient/8d6c2cd5-0eec-496a-88d0-3785a135df09"/>
+               <display value="REARDON, John"/>
             </subject>
-            <issued value="2019-04-06T12:00:00+00:00"></issued>
+            <issued value="2019-04-06T12:00:00+00:00"/>
             <performer>
-               <reference value="Organization/d6407de7-0e86-45eb-93cb-035094aaa49e"></reference>
-               <display value="GREENTOWN GENERAL HOSPITAL"></display>
+               <reference value="Organization/d6407de7-0e86-45eb-93cb-035094aaa49e"/>
+               <display value="GREENTOWN GENERAL HOSPITAL"/>
             </performer>
             <valueQuantity>
-               <value value="0.28999999999999998"></value>
-               <unit value="10*9/L"></unit>
+               <value value="0.28999999999999998"/>
+               <unit value="10*9/L"/>
             </valueQuantity>
             <specimen>
-               <reference value="Specimen/756a8361-79ce-4561-afcb-a91fe19df123"></reference>
+               <reference value="Specimen/756a8361-79ce-4561-afcb-a91fe19df123"/>
             </specimen>
             <referenceRange>
-               <text value="greater than 0.04 to greater than 0.4"></text>
+               <text value="greater than 0.04 to greater than 0.4"/>
             </referenceRange>
          </Observation>
       </resource>
@@ -1067,44 +1067,44 @@
    <entry>
       <resource>
          <Observation xmlns="http://hl7.org/fhir">
-            <id value="fedb7c2d-337c-435c-9169-612349783b5a"></id>
+            <id value="fedb7c2d-337c-435c-9169-612349783b5a"/>
             <meta>
-               <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Observation-1"></profile>
+               <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Observation-1"/>
             </meta>
             <identifier>
-               <system value="https://tools.ietf.org/html/rfc4122"></system>
-               <value value="2af46949-4938-4c57-bad4-c4363e1965e5"></value>
+               <system value="https://tools.ietf.org/html/rfc4122"/>
+               <value value="2af46949-4938-4c57-bad4-c4363e1965e5"/>
             </identifier>
-            <status value="final"></status>
+            <status value="final"/>
             <category>
                <coding>
-                  <system value="http://snomed.info/sct"></system>
-                  <code value="394595002"></code>
-                  <display value="Pathology"></display>
+                  <system value="http://snomed.info/sct"/>
+                  <code value="394595002"/>
+                  <display value="Pathology"/>
                </coding>
             </category>
             <code>
                <coding>
-                  <system value="http://snomed.info/sct"></system>
-                  <code value="1015561000000104"></code>
-                  <display value="Percentage eosinophils"></display>
+                  <system value="http://snomed.info/sct"/>
+                  <code value="1015561000000104"/>
+                  <display value="Percentage eosinophils"/>
                </coding>
             </code>
             <subject>
-               <reference value="Patient/8d6c2cd5-0eec-496a-88d0-3785a135df09"></reference>
-               <display value="REARDON, John"></display>
+               <reference value="Patient/8d6c2cd5-0eec-496a-88d0-3785a135df09"/>
+               <display value="REARDON, John"/>
             </subject>
-            <issued value="2019-04-06T12:00:00+00:00"></issued>
+            <issued value="2019-04-06T12:00:00+00:00"/>
             <performer>
-               <reference value="Organization/d6407de7-0e86-45eb-93cb-035094aaa49e"></reference>
-               <display value="GREENTOWN GENERAL HOSPITAL"></display>
+               <reference value="Organization/d6407de7-0e86-45eb-93cb-035094aaa49e"/>
+               <display value="GREENTOWN GENERAL HOSPITAL"/>
             </performer>
             <valueQuantity>
-               <value value="0.90000000000000002"></value>
-               <unit value="%"></unit>
+               <value value="0.90000000000000002"/>
+               <unit value="%"/>
             </valueQuantity>
             <specimen>
-               <reference value="Specimen/756a8361-79ce-4561-afcb-a91fe19df123"></reference>
+               <reference value="Specimen/756a8361-79ce-4561-afcb-a91fe19df123"/>
             </specimen>
          </Observation>
       </resource>
@@ -1112,51 +1112,51 @@
    <entry>
       <resource>
          <Observation xmlns="http://hl7.org/fhir">
-            <id value="f9070943-7460-413a-a608-e15334b6e1d9"></id>
+            <id value="f9070943-7460-413a-a608-e15334b6e1d9"/>
             <meta>
-               <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Observation-1"></profile>
+               <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Observation-1"/>
             </meta>
             <identifier>
-               <system value="https://tools.ietf.org/html/rfc4122"></system>
-               <value value="2af46949-4938-4c57-bad4-c4363e1965e6"></value>
+               <system value="https://tools.ietf.org/html/rfc4122"/>
+               <value value="2af46949-4938-4c57-bad4-c4363e1965e6"/>
             </identifier>
-            <status value="final"></status>
+            <status value="final"/>
             <category>
                <coding>
-                  <system value="http://snomed.info/sct"></system>
-                  <code value="394595002"></code>
-                  <display value="Pathology"></display>
+                  <system value="http://snomed.info/sct"/>
+                  <code value="394595002"/>
+                  <display value="Pathology"/>
                </coding>
             </category>
             <code>
                <coding>
-                  <system value="http://snomed.info/sct"></system>
-                  <code value="1022571000000108"></code>
-                  <display value="Basophil count"></display>
+                  <system value="http://snomed.info/sct"/>
+                  <code value="1022571000000108"/>
+                  <display value="Basophil count"/>
                </coding>
             </code>
             <subject>
-               <reference value="Patient/8d6c2cd5-0eec-496a-88d0-3785a135df09"></reference>
-               <display value="REARDON, John"></display>
+               <reference value="Patient/8d6c2cd5-0eec-496a-88d0-3785a135df09"/>
+               <display value="REARDON, John"/>
             </subject>
-            <issued value="2019-04-06T12:00:00+00:00"></issued>
+            <issued value="2019-04-06T12:00:00+00:00"/>
             <performer>
-               <reference value="Organization/d6407de7-0e86-45eb-93cb-035094aaa49e"></reference>
-               <display value="GREENTOWN GENERAL HOSPITAL"></display>
+               <reference value="Organization/d6407de7-0e86-45eb-93cb-035094aaa49e"/>
+               <display value="GREENTOWN GENERAL HOSPITAL"/>
             </performer>
             <valueQuantity>
-               <value value="0.059999999999999998"></value>
-               <unit value="10*9/L"></unit>
+               <value value="0.059999999999999998"/>
+               <unit value="10*9/L"/>
             </valueQuantity>
             <specimen>
-               <reference value="Specimen/756a8361-79ce-4561-afcb-a91fe19df123"></reference>
+               <reference value="Specimen/756a8361-79ce-4561-afcb-a91fe19df123"/>
             </specimen>
             <referenceRange>
                <low>
-                  <value value="0.02"></value>
+                  <value value="0.02"/>
                </low>
                <high>
-                  <value value="0.10"></value>
+                  <value value="0.10"/>
                </high>
             </referenceRange>
          </Observation>
@@ -1165,44 +1165,44 @@
    <entry>
       <resource>
          <Observation xmlns="http://hl7.org/fhir">
-            <id value="66acb40a-e241-474a-92b5-c74f9aa6a854"></id>
+            <id value="66acb40a-e241-474a-92b5-c74f9aa6a854"/>
             <meta>
-               <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Observation-1"></profile>
+               <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Observation-1"/>
             </meta>
             <identifier>
-               <system value="https://tools.ietf.org/html/rfc4122"></system>
-               <value value="2af46949-4938-4c57-bad4-c4363e1965e7"></value>
+               <system value="https://tools.ietf.org/html/rfc4122"/>
+               <value value="2af46949-4938-4c57-bad4-c4363e1965e7"/>
             </identifier>
-            <status value="final"></status>
+            <status value="final"/>
             <category>
                <coding>
-                  <system value="http://snomed.info/sct"></system>
-                  <code value="394595002"></code>
-                  <display value="Pathology"></display>
+                  <system value="http://snomed.info/sct"/>
+                  <code value="394595002"/>
+                  <display value="Pathology"/>
                </coding>
             </category>
             <code>
                <coding>
-                  <system value="http://snomed.info/sct"></system>
-                  <code value="1015501000000103"></code>
-                  <display value="Percentage basophils"></display>
+                  <system value="http://snomed.info/sct"/>
+                  <code value="1015501000000103"/>
+                  <display value="Percentage basophils"/>
                </coding>
             </code>
             <subject>
-               <reference value="Patient/8d6c2cd5-0eec-496a-88d0-3785a135df09"></reference>
-               <display value="REARDON, John"></display>
+               <reference value="Patient/8d6c2cd5-0eec-496a-88d0-3785a135df09"/>
+               <display value="REARDON, John"/>
             </subject>
-            <issued value="2019-04-06T12:00:00+00:00"></issued>
+            <issued value="2019-04-06T12:00:00+00:00"/>
             <performer>
-               <reference value="Organization/d6407de7-0e86-45eb-93cb-035094aaa49e"></reference>
-               <display value="GREENTOWN GENERAL HOSPITAL"></display>
+               <reference value="Organization/d6407de7-0e86-45eb-93cb-035094aaa49e"/>
+               <display value="GREENTOWN GENERAL HOSPITAL"/>
             </performer>
             <valueQuantity>
-               <value value="0"></value>
-               <unit value="%"></unit>
+               <value value="0"/>
+               <unit value="%"/>
             </valueQuantity>
             <specimen>
-               <reference value="Specimen/756a8361-79ce-4561-afcb-a91fe19df123"></reference>
+               <reference value="Specimen/756a8361-79ce-4561-afcb-a91fe19df123"/>
             </specimen>
          </Observation>
       </resource>
@@ -1211,39 +1211,39 @@
    <entry>
       <resource>
          <ProcedureRequest xmlns="http://hl7.org/fhir">
-            <id value="d9df1431-22ac-462a-946a-f195f6c639b0"></id>
+            <id value="d9df1431-22ac-462a-946a-f195f6c639b0"/>
             <meta>
-               <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-ProcedureRequest-1"></profile>
+               <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-ProcedureRequest-1"/>
             </meta>
             <identifier>
-               <system value="https://tools.ietf.org/html/rfc4122"></system>
-               <value value="7e9bbd01-4e52-420d-b05b-48bc671d6709"></value>
+               <system value="https://tools.ietf.org/html/rfc4122"/>
+               <value value="7e9bbd01-4e52-420d-b05b-48bc671d6709"/>
             </identifier>
-            <status value="active"></status>
-            <intent value="order"></intent>
+            <status value="active"/>
+            <intent value="order"/>
             <code>
                <coding>
-                  <system value="http://snomed.info/sct"></system>
-                  <code value="26604007"></code>
-                  <display value="FBC - Full blood count"></display>
+                  <system value="http://snomed.info/sct"/>
+                  <code value="26604007"/>
+                  <display value="FBC - Full blood count"/>
                </coding>
             </code>
             <subject>
-               <reference value="Patient/8d6c2cd5-0eec-496a-88d0-3785a135df09"></reference>
-               <display value="REARDON, John"></display>
+               <reference value="Patient/8d6c2cd5-0eec-496a-88d0-3785a135df09"/>
+               <display value="REARDON, John"/>
             </subject>
             <requester>
                <agent>
-                  <reference value="Practitioner/f25e9d63-6a4e-4de6-b9dc-c912fda62b01"></reference>
-                  <display value="SMITH"></display>
+                  <reference value="Practitioner/f25e9d63-6a4e-4de6-b9dc-c912fda62b01"/>
+                  <display value="SMITH"/>
                </agent>
             </requester>
             <performer>
-               <reference value="Organization/d6407de7-0e86-45eb-93cb-035094aaa49e"></reference>
-               <display value="GREENTOWN GENERAL HOSPITAL"></display>
+               <reference value="Organization/d6407de7-0e86-45eb-93cb-035094aaa49e"/>
+               <display value="GREENTOWN GENERAL HOSPITAL"/>
             </performer>
             <note>
-               <text value="FBC"></text>
+               <text value="FBC"/>
             </note>
          </ProcedureRequest>
       </resource>
@@ -1251,41 +1251,41 @@
    <entry>
       <resource>
          <DiagnosticReport xmlns="http://hl7.org/fhir">
-            <id value="efae5859-28df-4e7d-be91-6df56d8215e5"></id>
+            <id value="efae5859-28df-4e7d-be91-6df56d8215e5"/>
             <meta>
-               <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-DiagnosticReport-1"></profile>
+               <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-DiagnosticReport-1"/>
             </meta>
             <identifier>
-               <system value="https://tools.ietf.org/html/rfc4122"></system>
-               <value value="1b663fc5-9dec-49c0-90ed-18a7cfa5a6b3"></value>
+               <system value="https://tools.ietf.org/html/rfc4122"/>
+               <value value="1b663fc5-9dec-49c0-90ed-18a7cfa5a6b3"/>
             </identifier>
             <basedOn>
-               <reference value="ProcedureRequest/d9df1431-22ac-462a-946a-f195f6c639b0"></reference>
+               <reference value="ProcedureRequest/d9df1431-22ac-462a-946a-f195f6c639b0"/>
             </basedOn>
-            <status value="final"></status>
+            <status value="final"/>
             <code>
                <coding>
-                  <system value="http://snomed.info/sct"></system>
-                  <code value="721981007"></code>
-                  <display value="Diagnostic studies report"></display>
+                  <system value="http://snomed.info/sct"/>
+                  <code value="721981007"/>
+                  <display value="Diagnostic studies report"/>
                </coding>
             </code>
             <subject>
-               <reference value="Patient/8d6c2cd5-0eec-496a-88d0-3785a135df09"></reference>
-               <display value="REARDON, John"></display>
+               <reference value="Patient/8d6c2cd5-0eec-496a-88d0-3785a135df09"/>
+               <display value="REARDON, John"/>
             </subject>
-            <issued value="2019-04-03T12:00:00+00:00"></issued>
+            <issued value="2019-04-03T12:00:00+00:00"/>
             <performer>
                <actor>
-                  <reference value="Organization/d6407de7-0e86-45eb-93cb-035094aaa49e"></reference>
-                  <display value="GREENTOWN GENERAL HOSPITAL"></display>
+                  <reference value="Organization/d6407de7-0e86-45eb-93cb-035094aaa49e"/>
+                  <display value="GREENTOWN GENERAL HOSPITAL"/>
                </actor>
             </performer>
             <specimen>
-               <reference value="Specimen/756a8361-79ce-4561-afcb-a91fe19df124"></reference>
+               <reference value="Specimen/756a8361-79ce-4561-afcb-a91fe19df124"/>
             </specimen>
             <result>
-               <reference value="Observation/dacb177a-9501-4dcc-8b22-b941791ae0db"></reference>
+               <reference value="Observation/dacb177a-9501-4dcc-8b22-b941791ae0db"/>
             </result>
          </DiagnosticReport>
       </resource>
@@ -1293,29 +1293,29 @@
    <entry>
       <resource>
          <Specimen xmlns="http://hl7.org/fhir">
-            <id value="756a8361-79ce-4561-afcb-a91fe19df124"></id>
+            <id value="756a8361-79ce-4561-afcb-a91fe19df124"/>
             <meta>
-               <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Specimen-1"></profile>
+               <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-Specimen-1"/>
             </meta>
             <identifier>
-               <system value="https://tools.ietf.org/html/rfc4122"></system>
-               <value value="1b663fc5-9dec-49c0-9eed-18a7cfa5a6b3"></value>
+               <system value="https://tools.ietf.org/html/rfc4122"/>
+               <value value="1b663fc5-9dec-49c0-9eed-18a7cfa5a6b3"/>
             </identifier>
-            <status value="available"></status>
+            <status value="available"/>
             <type>
                <coding>
-                  <system value="http://snomed.info/sct"></system>
-                  <code value="122555007"></code>
-                  <display value="Venous blood specimen"></display>
+                  <system value="http://snomed.info/sct"/>
+                  <code value="122555007"/>
+                  <display value="Venous blood specimen"/>
                </coding>
             </type>
             <subject>
-               <reference value="Patient/8d6c2cd5-0eec-496a-88d0-3785a135df09"></reference>
-               <display value="REARDON, John"></display>
+               <reference value="Patient/8d6c2cd5-0eec-496a-88d0-3785a135df09"/>
+               <display value="REARDON, John"/>
             </subject>
-            <receivedTime value="2017-11-01T15:00:00+00:00"></receivedTime>
+            <receivedTime value="2017-11-01T15:00:00+00:00"/>
             <collection>
-               <collectedDateTime value="2019-04-01T11:00:00+00:00"></collectedDateTime>
+               <collectedDateTime value="2019-04-01T11:00:00+00:00"/>
             </collection>
          </Specimen>
       </resource>

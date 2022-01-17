@@ -1,42 +1,42 @@
 <Bundle xmlns="http://hl7.org/fhir">
    <meta>
-      <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/GPConnect-StructuredRecord-Bundle-1"></profile>
+      <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/GPConnect-StructuredRecord-Bundle-1"/>
    </meta>
-   <type value="collection"></type>
+   <type value="collection"/>
    <entry>
       <resource>
          <List xmlns="http://hl7.org/fhir">
             <meta>
-               <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-List-1"></profile>
+               <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-List-1"/>
             </meta>
-            <status value="current"></status>
-            <mode value="snapshot"></mode>
-            <title value="Outbound referral"></title>
+            <status value="current"/>
+            <mode value="snapshot"/>
+            <title value="Outbound referral"/>
             <code>
                <coding>
-                  <system value="http://snomed.info/sct"></system>
-                  <code value="792931000000107"></code>
-                  <display value="Outbound referral"></display>
+                  <system value="http://snomed.info/sct"/>
+                  <code value="792931000000107"/>
+                  <display value="Outbound referral"/>
                </coding>
             </code>
             <subject>
-               <reference value="Patient/04603d77-1a4e-4d63-b246-d7504f8bd833"></reference>
+               <reference value="Patient/04603d77-1a4e-4d63-b246-d7504f8bd833"/>
             </subject>
-            <date value="2019-03-01T10:57:34+00:00"></date>
+            <date value="2019-03-01T10:57:34+00:00"/>
             <orderedBy>
                <coding>
-                  <system value="http://hl7.org/fhir/list-order"></system>
-                  <code value="event-date"></code>
+                  <system value="http://hl7.org/fhir/list-order"/>
+                  <code value="event-date"/>
                </coding>
             </orderedBy>
             <entry>
                <item>
-                  <reference value="ReferralRequest/Consultation1-Topic1-Category-Plan-ReferralRequest-1"></reference>
+                  <reference value="ReferralRequest/Consultation1-Topic1-Category-Plan-ReferralRequest-1"/>
                </item>
             </entry>
             <entry>
                <item>
-                  <reference value="ReferralRequest/Consultation1-Topic5-Category-Plan-ReferralRequest-1"></reference>
+                  <reference value="ReferralRequest/Consultation1-Topic5-Category-Plan-ReferralRequest-1"/>
                </item>
             </entry>
          </List>
@@ -45,87 +45,87 @@
    <entry>
       <resource>
          <ReferralRequest xmlns="http://hl7.org/fhir">
-            <id value="Consultation1-Topic5-Category-Plan-ReferralRequest-1"></id>
+            <id value="Consultation1-Topic5-Category-Plan-ReferralRequest-1"/>
             <meta>
-               <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-ReferralRequest-1"></profile>
+               <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-ReferralRequest-1"/>
             </meta>
             <identifier>
-               <system value="https://fhir.nhs.uk/Id/cross-care-setting-identifier"></system>
-               <value value="B154D1A3-D631-49BD-8B67-2F76D7D85865"></value>
+               <system value="https://fhir.nhs.uk/Id/cross-care-setting-identifier"/>
+               <value value="B154D1A3-D631-49BD-8B67-2F76D7D85865"/>
             </identifier>
             <identifier>
-               <system value="https://fhir.nhs.uk/Id/ubr-number"></system>
-               <value value="bb2378b6-dde2-11e9-9d36-2a2ae2dbcce4"></value>
+               <system value="https://fhir.nhs.uk/Id/ubr-number"/>
+               <value value="bb2378b6-dde2-11e9-9d36-2a2ae2dbcce4"/>
             </identifier>
-            <status value="unknown"></status>
-            <intent value="order"></intent>
-            <priority value="routine"></priority>
+            <status value="unknown"/>
+            <intent value="order"/>
+            <priority value="routine"/>
             <subject>
-               <reference value="Patient/04603d77-1a4e-4d63-b246-d7504f8bd833"></reference>
+               <reference value="Patient/04603d77-1a4e-4d63-b246-d7504f8bd833"/>
             </subject>
             <context>
-               <reference value="Encounter/Encounter1"></reference>
+               <reference value="Encounter/Encounter1"/>
             </context>
-            <authoredOn value="2019-03-28T10:30:00+00:00"></authoredOn>
+            <authoredOn value="2019-03-28T10:30:00+00:00"/>
             <requester>
                <agent>
-                  <reference value="Practitioner/ff266bb2-cddb-4d03-837c-bd64d4bbe4eb"></reference>
+                  <reference value="Practitioner/ff266bb2-cddb-4d03-837c-bd64d4bbe4eb"/>
                </agent>
             </requester>
             <recipient>
-               <reference value="Practitioner/bb2379f6-dde2-11e9-9d36-2a2ae2dbcce4"></reference>
-               <display value="Dr Dave"></display>
+               <reference value="Practitioner/bb2379f6-dde2-11e9-9d36-2a2ae2dbcce4"/>
+               <display value="Dr Dave"/>
             </recipient>
             <reasonCode>
                <coding>
-                  <system value="http://snomed.info/sct"></system>
-                  <code value="308447003"></code>
-                  <display value="Referral to physiotherapist"></display>
+                  <system value="http://snomed.info/sct"/>
+                  <code value="308447003"/>
+                  <display value="Referral to physiotherapist"/>
                </coding>
             </reasonCode>
-            <description value="Referral due to swollen legs"></description>
+            <description value="Referral due to swollen legs"/>
          </ReferralRequest>
       </resource>
    </entry>
    <entry>
       <resource>
          <ReferralRequest xmlns="http://hl7.org/fhir">
-            <id value="Consultation1-Topic1-Category-Plan-ReferralRequest-1"></id>
+            <id value="Consultation1-Topic1-Category-Plan-ReferralRequest-1"/>
             <meta>
-               <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-ReferralRequest-1"></profile>
+               <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-ReferralRequest-1"/>
             </meta>
             <identifier>
-               <system value="https://fhir.nhs.uk/Id/cross-care-setting-identifier"></system>
-               <value value="B154D1A3-D631-49BD-8B67-2F76D7D85866"></value>
+               <system value="https://fhir.nhs.uk/Id/cross-care-setting-identifier"/>
+               <value value="B154D1A3-D631-49BD-8B67-2F76D7D85866"/>
             </identifier>
             <identifier>
-               <system value="https://fhir.nhs.uk/Id/ubr-number"></system>
-               <value value="bb2378b6-dde2-11e9-9d36-2a2ae2dbcce5"></value>
+               <system value="https://fhir.nhs.uk/Id/ubr-number"/>
+               <value value="bb2378b6-dde2-11e9-9d36-2a2ae2dbcce5"/>
             </identifier>
-            <status value="unknown"></status>
-            <intent value="order"></intent>
-            <priority value="routine"></priority>
+            <status value="unknown"/>
+            <intent value="order"/>
+            <priority value="routine"/>
             <subject>
-               <reference value="Patient/04603d77-1a4e-4d63-b246-d7504f8bd833"></reference>
+               <reference value="Patient/04603d77-1a4e-4d63-b246-d7504f8bd833"/>
             </subject>
             <context>
-               <reference value="Encounter/Encounter1"></reference>
+               <reference value="Encounter/Encounter1"/>
             </context>
-            <authoredOn value="2019-03-28T10:30:00+00:00"></authoredOn>
+            <authoredOn value="2019-03-28T10:30:00+00:00"/>
             <requester>
                <agent>
-                  <reference value="Practitioner/ff266bb2-cddb-4d03-837c-bd64d4bbe4eb"></reference>
+                  <reference value="Practitioner/ff266bb2-cddb-4d03-837c-bd64d4bbe4eb"/>
                </agent>
             </requester>
             <recipient>
-               <reference value="Practitioner/bb2379f6-dde2-11e9-9d36-2a2ae2dbcce4"></reference>
-               <display value="Dr Dave"></display>
+               <reference value="Practitioner/bb2379f6-dde2-11e9-9d36-2a2ae2dbcce4"/>
+               <display value="Dr Dave"/>
             </recipient>
             <reasonCode>
                <coding>
-                  <system value="http://snomed.info/sct"></system>
-                  <code value="308448008"></code>
-                  <display value="Referral to counselor"></display>
+                  <system value="http://snomed.info/sct"/>
+                  <code value="308448008"/>
+                  <display value="Referral to counselor"/>
                </coding>
             </reasonCode>
          </ReferralRequest>
@@ -134,21 +134,21 @@
    <entry>
       <resource>
          <PractitionerRole xmlns="http://hl7.org/fhir">
-            <id value="e0244de8-07ef-4274-9f7a-d7067bcc8d21"></id>
+            <id value="e0244de8-07ef-4274-9f7a-d7067bcc8d21"/>
             <meta>
-               <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-PractitionerRole-1"></profile>
+               <profile value="https://fhir.nhs.uk/STU3/StructureDefinition/CareConnect-GPC-PractitionerRole-1"/>
             </meta>
             <practitioner>
-               <reference value="Practitioner/6c41ebfd-57c3-4162-9d7b-208c171a2fd7"></reference>
+               <reference value="Practitioner/6c41ebfd-57c3-4162-9d7b-208c171a2fd7"/>
             </practitioner>
             <organization>
-               <reference value="Organization/db67f447-b30d-442a-8e31-6918d1367eeb"></reference>
+               <reference value="Organization/db67f447-b30d-442a-8e31-6918d1367eeb"/>
             </organization>
             <code>
                <coding>
-                  <system value="https://fhir.hl7.org.uk/STU3/CodeSystem/CareConnect-SDSJobRoleName-1"></system>
-                  <code value="R0260"></code>
-                  <display value="General Medical Practitioner"></display>
+                  <system value="https://fhir.hl7.org.uk/STU3/CodeSystem/CareConnect-SDSJobRoleName-1"/>
+                  <code value="R0260"/>
+                  <display value="General Medical Practitioner"/>
                </coding>
             </code>
          </PractitionerRole>

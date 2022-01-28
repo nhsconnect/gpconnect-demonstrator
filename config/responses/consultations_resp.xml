@@ -373,7 +373,7 @@
             </extension>
             <extension url="https://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-CareConnect-RelatedClinicalContent-1">
                <valueReference>
-                  <reference value="Referral items are not supported by the provider system"/>
+                  <display value="Referral items are not supported by the provider system"/>
                </valueReference>
             </extension>
             <extension url="https://fhir.hl7.org.uk/STU3/StructureDefinition/Extension-CareConnect-RelatedClinicalContent-1">

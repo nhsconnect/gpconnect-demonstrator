@@ -105,14 +105,14 @@ public class StructuredBuilder {
         @Override
         public Integer put(String reference, Integer i) {
             if (DEBUG_LEVEL > 0) {
-                if (!Arrays.asList(SNOMED_LIST_TITLES).contains(reference) && !reference.matches("^[^/]+/[^/]+$")) {
+                if (!Arrays.asList(SNOMED_LIST_TITLES).contains(reference) && reference != null && !reference.matches("^[^/]+/[^/]+$")) {
                     System.err.println("WARNING: StructuredBuilder - Adding non reference format key to refCounts " + reference);
                 }
                 if (get(reference) != null && get(reference) != i - 1) {
                     System.err.println("WARNING: StructuredBuilder - Non incrememntal change to refCounts " + reference + " current value " + get(reference) + " value to set " + i);
                 }
             }
-            return super.put(reference, i);
+            return reference != null ? super.put(reference, i) : null;
         }
     };
 
@@ -122,7 +122,7 @@ public class StructuredBuilder {
         @Override
         public Resource put(String reference, Resource r) {
             if (DEBUG_LEVEL > 0) {
-                if (!Arrays.asList(SNOMED_LIST_TITLES).contains(reference) && !reference.matches("^[^/]+/[^/]+$")) {
+                if (!Arrays.asList(SNOMED_LIST_TITLES).contains(reference) && reference != null && !reference.matches("^[^/]+/[^/]+$")) {
                     System.err.println("WARNING: StructuredBuilder - Adding non reference format key to addedToResponse " + reference);
                 } else {
                     //System.err.println("StructuredBuilder - Adding reference format key to addedToResponse " + key);
@@ -131,7 +131,7 @@ public class StructuredBuilder {
                     System.err.println("WARNING: StructuredBuilder - Setting an existing addedToResponse entry " + reference);
                 }
             }
-            return super.put(reference, r);
+            return reference != null ? super.put(reference, r) : null;
         }
     };
 
@@ -1126,9 +1126,9 @@ public class StructuredBuilder {
                 if (listResource.getTitle() != null) {
                     String listTitle = listResource.getTitle();
                     System.out.println("Checking " + listTitle);
-                    if (Arrays.asList(SNOMED_LIST_TITLES).contains(listTitle) && 
-                            // dont rebuild uncanned lists here, (only happens when canned are mixed with uncanned)
-                            !Arrays.asList(new String[]{SNOMED_ACTIVE_ALLERGIES_DISPLAY, SNOMED_RESOLVED_ALLERGIES_DISPLAY,SNOMED_MEDICATION_LIST_DISPLAY}).contains(listTitle)) {
+                    if (Arrays.asList(SNOMED_LIST_TITLES).contains(listTitle)
+                            && // dont rebuild uncanned lists here, (only happens when canned are mixed with uncanned)
+                            !Arrays.asList(new String[]{SNOMED_ACTIVE_ALLERGIES_DISPLAY, SNOMED_RESOLVED_ALLERGIES_DISPLAY, SNOMED_MEDICATION_LIST_DISPLAY}).contains(listTitle)) {
                         System.out.println("Rebuilding " + listTitle + " record count = " + listResource.getEntry().size());
                         for (ListEntryComponent listEntry : listResource.getEntry()) {
                             System.out.println("\t" + listEntry.getItem().getReference());
@@ -1224,7 +1224,7 @@ public class StructuredBuilder {
      */
     private void walkResource(Bundle structuredBundle, HashMap<ResourceType, HashMap<String, Resource>> resourceTypes,
             String referenceStr, int indent) throws FHIRException {
-        if (referenceStr.matches("^.*/.*$")) {
+        if (referenceStr != null && referenceStr.matches("^.*/.*$")) {
             ResourceType rt = ResourceType.valueOf(referenceStr.replaceFirst("^(.*)/.*$", "$1"));
             HashMap<String, Resource> hm = resourceTypes.get(rt);
             if (hm != null) {

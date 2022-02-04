@@ -238,22 +238,13 @@ public class PopulateMedicationBundle {
     private List<MedicationStatementDetail> findMedicationStatements(Long patientId, Period medicationPeriod) {
         List<MedicationStatementEntity> medicationStatementEntities = medicationStatementRepository.findByPatientId(patientId);
         List<MedicationStatementDetail> medicationStatements = new ArrayList<>();
-
         List<MedicationStatementEntity> statementsfilteredByDate = new ArrayList<>();
         if (medicationPeriod != null) {
             medicationStatementEntities.forEach(statement -> {
-                if (statement.getLastIssueDate() != null) {
-                    if (dateIsWithinPeriod(statement.getLastIssueDate(), medicationPeriod)) {
-                        statementsfilteredByDate.add(statement);
-                    }
-                } else if (statement.getStartDate() != null) {
-                    if (dateIsWithinPeriod(statement.getStartDate(), medicationPeriod)) {
-                        statementsfilteredByDate.add(statement);
-                    }
-                } else if (statement.getDateAsserted() != null) {
-                    if (dateIsWithinPeriod(statement.getDateAsserted(), medicationPeriod)) {
-                        statementsfilteredByDate.add(statement);
-                    }
+                if (statement.getStartDate() != null && dateIsWithinPeriod(statement.getStartDate(), medicationPeriod)) {
+                    statementsfilteredByDate.add(statement);
+                } else  if (statement.getEndDate() != null && dateIsWithinPeriod(statement.getEndDate(), medicationPeriod)) {
+                    statementsfilteredByDate.add(statement);
                 }
             });
             statementsfilteredByDate.forEach(entity -> {

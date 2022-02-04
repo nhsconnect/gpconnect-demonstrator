@@ -35,3 +35,22 @@ INSERT INTO patient_telecoms
  (patientId,system,usetype,value)
 VALUES
  (2,'PHONE','MOBILE','+447401254880');
+
+SET @MonthOffset = (SELECT TIMESTAMPDIFF(MONTH, '2018-10-01', now()));
+
+UPDATE medication_statements
+SET dateAsserted = DATE_ADD(dateAsserted, INTERVAL @MonthOffset MONTH), 
+    lastIssueDate = DATE_ADD(lastIssueDate, INTERVAL @MonthOffset MONTH),
+    startDate = DATE_ADD(startDate, INTERVAL @MonthOffset MONTH),
+    endDate = DATE_ADD(endDate, INTERVAL @MonthOffset MONTH),
+    dosageLastChanged = DATE_ADD(dosageLastChanged, INTERVAL @MonthOffset MONTH)
+WHERE 1=1;
+
+UPDATE medication_requests
+SET authoredOn = DATE_ADD(authoredOn, INTERVAL @MonthOffset MONTH),
+    dispenseRequestStartDate = DATE_ADD(dispenseRequestStartDate, INTERVAL @MonthOffset MONTH),
+    dispenseRequestEndDate = DATE_ADD(dispenseRequestEndDate, INTERVAL @MonthOffset MONTH),
+    authorisationExpiryDate = DATE_ADD(authorisationExpiryDate, INTERVAL @MonthOffset MONTH),
+    statusReasonDate = DATE_ADD(statusReasonDate, INTERVAL @MonthOffset MONTH),
+    lastUpdated = DATE_ADD(lastUpdated, INTERVAL @MonthOffset MONTH) 
+WHERE 1=1;

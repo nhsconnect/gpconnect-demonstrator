@@ -64,3 +64,13 @@ INSERT INTO referrals
   (nhsNumber,sectionDate,referral_from,referral_to,priority,details,lastUpdated)
 VALUES
   (9658218873 ,'2016-07-02','Dr Johnson and Partners','Community Diabetic Clinic','Routine','Needs further support with dietary needs','2016-07-02');
+
+/* 0.7.3 */
+INSERT INTO emergencycodes
+  (nhsNumber,emergencyCodeDate,entry,details,location)
+VALUES
+  (9658218873 ,'2020-04-17','Severe acute respiratory syndrome coronavirus 2 detected (finding)','','Problems and Issues'),
+  (9658218873 ,'2020-04-16','Swab for severe acute respiratory syndrome coronavirus 2 taken by healthcare professional (situation)','','Observations'),
+  (9658218873 ,'2020-04-15','High risk category for developing complication from COVID-19 infection','','Problems and Issues'),
+  (9658218873 ,'2020-04-15','Telephone consultation for suspected 2019-nCoV (novel coronavirus)','','Clinical Items'),
+  (9658218873 ,'2020-04-10','Suspected disease caused by 2019-nCoV (novel coronavirus)','','Problems and Issues');

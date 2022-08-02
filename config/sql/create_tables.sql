@@ -28,6 +28,7 @@ DROP TABLE IF EXISTS orders;
 DROP TABLE IF EXISTS appointment_appointments;
 DROP TABLE IF EXISTS general_practitioners;
 DROP TABLE IF EXISTS medical_departments;
+DROP TABLE IF EXISTS emergencycodes;
 
 /* Create new table schemas */
 
@@ -347,5 +348,15 @@ CREATE TABLE orders (
   reasonText        VARCHAR(300) NULL,
   detail            VARCHAR(300) NULL,
   recieved          BOOLEAN      NULL,
+  PRIMARY KEY (id)
+);
+
+CREATE TABLE emergencycodes (
+  id                BIGINT       NOT NULL AUTO_INCREMENT,
+  nhsNumber        VARCHAR(250) NULL,
+  emergencyCodeDate         DATETIME     NULL,
+  entry             VARCHAR(300) NULL,
+  details           VARCHAR(300) NULL,
+  location          VARCHAR(300) NULL,
   PRIMARY KEY (id)
 );

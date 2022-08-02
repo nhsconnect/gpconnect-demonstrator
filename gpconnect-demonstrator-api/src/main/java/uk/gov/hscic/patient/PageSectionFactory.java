@@ -36,6 +36,8 @@ import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import uk.gov.hscic.patient.emergencycodes.model.EmergencyCodeEntity;
+import uk.gov.hscic.patient.emergencycodes.search.EmergencyCodeSearch;
 
 @Component
 public class PageSectionFactory {
@@ -75,6 +77,9 @@ public class PageSectionFactory {
 
     @Autowired
     private AdminItemSearch adminItemSearch;
+
+    @Autowired
+    private EmergencyCodeSearch emergencyCodeSearch;
 
     private final static SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("dd-MMM-yyyy");
     private final static SimpleDateFormat DATE_FORMAT_SQL = new SimpleDateFormat("yyyy-MM-dd");
@@ -116,6 +121,27 @@ public class PageSectionFactory {
         pageSection.addBanner("date-banner", sb.toString());
     }
 
+    /**
+     * Emergency Codes date range does not apply
+     *
+     * @param nhsNumber
+     * @param requestedFromDate as in the original request
+     * @param requestedToDate as in the original request
+     * @return PageSection
+     */
+    public PageSection getECPageSection(String nhsNumber, Date requestedFromDate, Date requestedToDate) {
+        List<List<Object>> ecRows = new ArrayList<>();
+        for (EmergencyCodeEntity emergencyCode : emergencyCodeSearch.findEmergencyCodes(nhsNumber)) {
+             ecRows.add(Arrays.asList(emergencyCode.getEmergencyCodeDate(), emergencyCode.getEntry(), emergencyCode.getDetails(), emergencyCode.getLocation()));
+        }
+        PageSection ps = new PageSection("Emergency Codes",
+                "cli-tab",
+                new Table(Arrays.asList("Date", "Entry", "Details", "Location of further information"), ecRows));
+
+        return ps;
+    }
+
+    
     /**
      * Active Problems date range does not apply also appears in SUM
      *

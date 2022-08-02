@@ -13,7 +13,7 @@ import ca.uhn.fhir.rest.server.provider.dstu2.ServerConformanceProvider;
 public class GpConnectServerConformanceProvider extends ServerConformanceProvider {
     
 	// **Change this for upgrade version**
-    public static final Version VERSION = new Version("0.7.2");
+    public static final Version VERSION = new Version("0.7.3");
 
 	public GpConnectServerConformanceProvider(RestfulServer theRestfulServer) {
 		super(theRestfulServer);

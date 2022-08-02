@@ -327,6 +327,7 @@ public class PatientResourceProvider implements IResourceProvider {
                 page = new Page("Summary", sectionName);
                 handlePageBanners(nhsNumber, page);
 
+                page.addPageSection(pageSectionFactory.getECPageSection(nhsNumber, null, null));
                 page.addPageSection(pageSectionFactory.getENCPageSection(nhsNumber, fromDate, toDate, requestedFromDate, requestedToDate, 3));
                 page.addPageSection(pageSectionFactory.getPRBActivePageSection(nhsNumber, null, null, IN_SUMMARY));
                 // default for this Consumer supplied filter is assumed to be all

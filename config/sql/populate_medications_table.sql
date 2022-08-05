@@ -1,4 +1,4 @@
-INSERT INTO gpconnect0_7.medications
+INSERT INTO gpconnect0_7_3.medications
   (id,name,lastUpdated)
 VALUES
   (261000,'Codeine phosphate (substance)','2016-07-25 12:00:00'),

@@ -1,4 +1,4 @@
-USE gpconnect0_7;
+USE gpconnect0_7_3;
 
 INSERT INTO general_practitioners
   (id,gp_name,address_1,address_2,address_3,address_4,address_5,postcode,lastUpdated)

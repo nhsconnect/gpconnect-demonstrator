@@ -1,4 +1,4 @@
-USE gpconnect0_7;
+USE gpconnect0_7_3;
 
 INSERT INTO medication_orders
   (id,date_written,order_status,patient_id,author_id,medication_id,dosage_text,dispense_quantity_text,dispense_review_date,dispense_medication_id,dispense_repeats_allowed,lastUpdated)

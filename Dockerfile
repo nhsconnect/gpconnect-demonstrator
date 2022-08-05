@@ -21,7 +21,7 @@ ENV DATABASE_ADDRESS 10.100.100.61
 ENV DATABASE_PORT 3306
 ENV DATABASE_USERNAME=gpconnectdbuser
 ENV DATABASE_PASSWORD=gpc0nn3ct
-ENV DATABASE_SCHEMA=gpconnect0_7
+ENV DATABASE_SCHEMA=gpconnect0_7_3
 ENV CONTEXT_PATH=/gpconnect-demonstrator/v0_7/
 ENTRYPOINT java -jar /app/app.war \
 --spring.config.location=file:/app/config/gpconnect-demonstrator-api.properties --server.port=19192 \

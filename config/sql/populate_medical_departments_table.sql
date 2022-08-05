@@ -1,4 +1,4 @@
-USE gpconnect0_7;
+USE gpconnect0_7_3;
 
 INSERT INTO medical_departments
   (id,department,lastUpdated)

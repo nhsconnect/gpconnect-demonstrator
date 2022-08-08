@@ -17,7 +17,7 @@ public class HealthcareServiceSearch {
     public HealthcareServiceDetail findHealthcareServiceByID(String healthcareServiceId) {
         final HealthcareServiceEntity item;
         try {
-            item = healthcareServiceRepository.findOne(Long.parseLong(healthcareServiceId));
+            item = healthcareServiceRepository.findById(Long.parseLong(healthcareServiceId)).get();
         } catch (NumberFormatException e) {
             return null;
         }

@@ -16,7 +16,7 @@ public class MedicationDispenseSearch {
     private MedicationDispenseRepository medicationDispenseRepository;
 
     public MedicationDispenseDetail findMedicationDispenseByID(Long id) {
-        MedicationDispenseEntity item = medicationDispenseRepository.findOne(id);
+        MedicationDispenseEntity item = medicationDispenseRepository.findById(id).get();
         return item == null
                 ? null
                 : transformer.transform(item);

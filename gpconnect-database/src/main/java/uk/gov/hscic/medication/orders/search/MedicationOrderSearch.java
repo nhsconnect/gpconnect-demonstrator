@@ -16,7 +16,7 @@ public class MedicationOrderSearch {
     private MedicationOrderRepository medicationOrderRepository;
 
     public MedicationOrderDetails findMedicationOrderByID(Long id) {
-        final MedicationOrderEntity item = medicationOrderRepository.findOne(id);
+        final MedicationOrderEntity item = medicationOrderRepository.findById(id).get();
 
         return item == null
                 ? null

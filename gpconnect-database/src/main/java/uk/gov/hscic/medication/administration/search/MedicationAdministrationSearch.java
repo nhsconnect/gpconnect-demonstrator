@@ -16,7 +16,7 @@ public class MedicationAdministrationSearch {
     private MedicationAdministrationRepository medicationAdministrationRepository;
 
     public MedicationAdministrationDetail findMedicationAdministrationByID(Long id) {
-        MedicationAdministrationEntity item = medicationAdministrationRepository.findOne(id);
+        MedicationAdministrationEntity item = medicationAdministrationRepository.findById(id).get();
 
         return item == null
                 ? null

@@ -16,7 +16,7 @@ public class OrderSearch {
     private OrderRepository orderRepository;
 
     public OrderDetail findOrderByID(Long id) {
-        final OrderEntity item = orderRepository.findOne(id);
+        final OrderEntity item = orderRepository.findById(id).get();
 
         return item == null
                 ? null

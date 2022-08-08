@@ -30,7 +30,7 @@ public class LocationSearch {
 	}
 
     public LocationDetails findLocationById(final String locationId) {
-        final LocationEntity item = locationRepository.findOne(Long.parseLong(locationId));
+        final LocationEntity item = locationRepository.findById(Long.parseLong(locationId)).get();
 
         return item == null
                 ? null

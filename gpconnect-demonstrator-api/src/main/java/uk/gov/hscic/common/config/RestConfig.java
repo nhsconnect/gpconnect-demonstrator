@@ -19,8 +19,8 @@ import org.apache.catalina.connector.Connector;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.context.embedded.EmbeddedServletContainerCustomizer;
-import org.springframework.boot.context.embedded.tomcat.TomcatEmbeddedServletContainerFactory;
+import org.springframework.boot.web.embedded.tomcat.TomcatServletWebServerFactory;
+import org.springframework.boot.web.server.WebServerFactoryCustomizer;
 import org.springframework.boot.web.servlet.ServletComponentScan;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -65,12 +65,12 @@ public class RestConfig {
     }
 
     @Bean
-    public EmbeddedServletContainerCustomizer containerCustomizer() {
+    public WebServerFactoryCustomizer containerCustomizer() {
         return container -> {
-            if (container instanceof TomcatEmbeddedServletContainerFactory && httpPort > 0) {
-                Connector connector = new Connector(TomcatEmbeddedServletContainerFactory.DEFAULT_PROTOCOL);
+            if (container instanceof TomcatServletWebServerFactory && httpPort > 0) {
+                Connector connector = new Connector(TomcatServletWebServerFactory.DEFAULT_PROTOCOL);
                 connector.setPort(httpPort);
-                ((TomcatEmbeddedServletContainerFactory) container).addAdditionalTomcatConnectors(connector);
+                ((TomcatServletWebServerFactory) container).addAdditionalTomcatConnectors(connector);
             }
         };
     }

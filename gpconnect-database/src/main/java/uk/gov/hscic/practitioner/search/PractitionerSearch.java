@@ -14,7 +14,7 @@ public class PractitionerSearch {
     private PractitionerRepository practitionerRepository;
 
     public PractitionerDetails findPractitionerDetails(final String practitionerId) {
-        final PractitionerEntity item = practitionerRepository.findOne(Long.parseLong(practitionerId));
+        final PractitionerEntity item = practitionerRepository.findById(Long.parseLong(practitionerId)).get();
 
         return item == null
                 ? null

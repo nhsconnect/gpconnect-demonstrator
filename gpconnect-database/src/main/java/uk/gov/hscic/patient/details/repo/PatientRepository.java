@@ -20,9 +20,9 @@ import java.util.List;
 import uk.gov.hscic.patient.details.model.PatientEntity;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.querydsl.QueryDslPredicateExecutor;
+import org.springframework.data.querydsl.QuerydslPredicateExecutor;
 
-public interface PatientRepository extends JpaRepository<PatientEntity, Long>, QueryDslPredicateExecutor<PatientEntity> {
+public interface PatientRepository extends JpaRepository<PatientEntity, Long>, QuerydslPredicateExecutor<PatientEntity> {
 
     PatientEntity findByNhsNumber(String nhsNumber);
 
@@ -30,5 +30,5 @@ public interface PatientRepository extends JpaRepository<PatientEntity, Long>, Q
 
     List<PatientEntity> findPatientsByDepartmentDepartmentIgnoreCase(String department, Pageable pageable);
 
-    PatientEntity findById(Long id);
+    //PatientEntity findById(Long id);
 }

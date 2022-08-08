@@ -55,7 +55,7 @@ public class PatientSearch {
     }
 
     public PatientDetails findPatientByInternalID(final String internalID) {
-        final PatientEntity patient = patientRepository.findById(Long.valueOf(internalID));
+        final PatientEntity patient = patientRepository.findById(Long.valueOf(internalID)).get();
 
         return patient == null
                 ? null

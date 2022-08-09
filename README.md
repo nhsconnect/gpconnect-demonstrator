@@ -9,7 +9,7 @@ To develop and run the application locally you must have the following installed
 |---|---|
 | Git | A revision control system. |
 | NodeJS | An open source, cross-platform runtime environment for developing JavaScript applications. |
-| Java JDK 8 | The Java Development Kit, which includes the Java Runtime Environment (JRE). |
+| Java JDK 11 | The Java Development Kit, which includes the Java Runtime Environment (JRE). |
 | Maven 3 | A popular Java build tool. |
 | MySQL | An open source RDBMS. |
 
@@ -31,8 +31,8 @@ https://desktop.github.com/
 #### Install NodeJS:
 https://nodejs.org/download/
 
-#### Install Java Development Kit 8:
-http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html
+#### Install Java Development Kit 11:
+https://www.oracle.com/java/technologies/downloads/#java11
 
 #### Install Maven 3:
 https://maven.apache.org/download.cgi
@@ -47,7 +47,7 @@ M2_HOME C:\Maven\apache-maven-3.3.9
 
 JAVA_HOME should point to the install directory of your local Java JDK install folder, e.g.
 ```
-JAVA_HOME C:\Program Files\Java\jdk1.8.0_121
+JAVA_HOME C:\Program Files\Java\jdk1.11.0_16
 ```
 
 PATH should contain the bin directory of both M2_HOME and JAVA_HOME, e.g.

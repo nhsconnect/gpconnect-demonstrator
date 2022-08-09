@@ -32,8 +32,7 @@ import org.apache.tomcat.util.descriptor.web.SecurityCollection;
 import org.apache.tomcat.util.descriptor.web.SecurityConstraint;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
-import org.springframework.boot.context.embedded.EmbeddedServletContainerFactory;
-import org.springframework.boot.context.embedded.tomcat.TomcatEmbeddedServletContainerFactory;
+import org.springframework.boot.web.embedded.tomcat.TomcatServletWebServerFactory;
 import org.springframework.context.annotation.Bean;
 
 @ServletComponentScan
@@ -71,11 +70,11 @@ public class RestConfig {
     
     
   @Bean
-  public EmbeddedServletContainerFactory servletContainer() {      
-      TomcatEmbeddedServletContainerFactory tomcat;
+  public TomcatServletWebServerFactory servletContainer() {      
+      TomcatServletWebServerFactory tomcat;
       
       if (enableHsts && httpPort != null && httpPort > 0) {
-          tomcat = new TomcatEmbeddedServletContainerFactory() {
+          tomcat = new TomcatServletWebServerFactory() {
               @Override
               protected void postProcessContext(Context context) {
                   SecurityConstraint securityConstraint = new SecurityConstraint();
@@ -87,7 +86,7 @@ public class RestConfig {
               }
           };     
       } else {
-          tomcat = new TomcatEmbeddedServletContainerFactory();
+          tomcat = new TomcatServletWebServerFactory();
       }
       
       tomcat.addAdditionalTomcatConnectors(createHttpConnector());   

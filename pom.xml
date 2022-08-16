@@ -23,7 +23,7 @@
     <artifactId>gpconnect</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <packaging>pom</packaging>
-    <name>GPConnect 0.7.3</name>
+    <name>GPConnect 0.7.4</name>
 
     <parent>
         <groupId>org.springframework.boot</groupId>

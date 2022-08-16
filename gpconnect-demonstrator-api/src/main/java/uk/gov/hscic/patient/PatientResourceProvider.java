@@ -95,6 +95,9 @@ public class PatientResourceProvider implements IResourceProvider {
     @Value("${datasource.patient.noconsent}")
     private String patientNoConsent;
 
+    @Value("${datasource.patient.deceased}")
+    private String patientDeceased;
+
     @Override
     public Class<Patient> getResourceType() {
         return Patient.class;
@@ -424,6 +427,13 @@ public class PatientResourceProvider implements IResourceProvider {
         Bundle.Entry patientEntry = new Bundle.Entry()
                 .setResource(patient)
                 .setFullUrl("Patient/" + patientId);
+
+        if (nhsNumber != null && nhsNumber.equals(patientDeceased)) {
+            Calendar cal = Calendar.getInstance();
+            // 0.7.4 patient 18 death date always 14 days earlier than now so in middle of 28 days windows when 404 is returned
+            cal.add(Calendar.DATE, -14);
+            patient.setDeceased(new DateTimeDt(cal.getTime()));
+        }
 
         CodingDt coding = new CodingDt()
                 .setSystem("http://snomed.info/sct")

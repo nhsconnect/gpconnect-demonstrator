@@ -89,6 +89,9 @@ public class PatientResourceProvider implements IResourceProvider {
     private static final int ADDRESS_DISTRICT_INDEX = 4;
 
     private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd");
+    
+    // this is documents 1.5.1 functionality that is not rqeuired at this time but probably will in the future
+    private static final boolean INHIBIT_28_DAYS_DECEASED = true;
 
     @Autowired
     private PractitionerResourceProvider practitionerResourceProvider;
@@ -166,12 +169,21 @@ public class PatientResourceProvider implements IResourceProvider {
             patients[i] = patients[i].trim();
         }
     }
+    
+    /**
+     * Check if its patient 18 (deceased 28 days)
+     * @param nhsNumber
+     * @return boolean true for return patient
+     */
+    private boolean checkDeceased28Days(String nhsNumber) {
+        return !INHIBIT_28_DAYS_DECEASED && nhsNumber.equals(patients[PATIENT_DECEASED_14_DAYS]);
+    }
 
     @Read(version = true)
     public Patient getPatientById(@IdParam IdType internalId) throws FHIRException {
         PatientDetails patientDetails = patientSearch.findPatientByInternalID(internalId.getIdPart());
 
-        if (patientDetails == null || patientDetails.isSensitive() || (patientDetails.isDeceased() && !patientDetails.getNhsNumber().equals(patients[PATIENT_DECEASED_14_DAYS])) || !patientDetails.isActive()) {
+        if (patientDetails == null || patientDetails.isSensitive() || (patientDetails.isDeceased() && !checkDeceased28Days(patientDetails.getNhsNumber())) || !patientDetails.isActive()) {
             throw OperationOutcomeFactory.buildOperationOutcomeException(
                     new ResourceNotFoundException("No patient details found for patient ID: " + internalId.getIdPart()),
                     SystemCode.PATIENT_NOT_FOUND, IssueType.NOTFOUND);
@@ -197,7 +209,7 @@ public class PatientResourceProvider implements IResourceProvider {
         PatientDetails patientDetails = patientSearch.findPatient(nhsNumber.fromToken(tokenParam));
 
         // ie does not return a deceased, inactive or sensitive patient in the list 
-        return null == patient || patient.getDeceased() != null && patient.getIdentifier().equals(patients[PATIENT_DECEASED_14_DAYS]) || !patientDetails.isActive() || patientDetails.isSensitive() ? Collections.emptyList()
+        return null == patient || ( patient.getDeceased() != null && !checkDeceased28Days(patient.getIdentifier().get(0).getValue())) || !patientDetails.isActive() || patientDetails.isSensitive() ? Collections.emptyList()
                 : Collections.singletonList(patient);
     }
 
@@ -254,7 +266,7 @@ public class PatientResourceProvider implements IResourceProvider {
         PatientDetails patientDetails = patientSearch.findPatient(NHS);
 
         // see https://nhsconnect.github.io/gpconnect/accessrecord_structured_development_retrieve_patient_record.html#error-handling
-        if (patientDetails == null || patientDetails.isSensitive() || (patientDetails.isDeceased() && !patientDetails.getNhsNumber().equals(patients[PATIENT_DECEASED_14_DAYS]) )  || !patientDetails.isActive()) {
+        if (patientDetails == null || patientDetails.isSensitive() || (patientDetails.isDeceased() && !checkDeceased28Days(patientDetails.getNhsNumber()) )  || !patientDetails.isActive()) {
             throw OperationOutcomeFactory.buildOperationOutcomeException(
                     new ResourceNotFoundException("No patient details found for patient ID: " + NHS),
                     SystemCode.PATIENT_NOT_FOUND, IssueType.NOTFOUND);

@@ -130,6 +130,7 @@ public final class SystemConstants {
     public static final int PATIENT_SUPERSEDED = 11; // patient 11 Superseded NHS Number
     public static final int PATIENT_NOTONSPINE = 14; // patient 14 Not on PDS
     public static final int PATIENT_NOCONSENT = 15; // patient 15 No consent to share
+    public static final int PATIENT_DECEASED_14_DAYS = 18; // patient 18 Deceased
     
     // TODO remove hard coding pick up from providerRouting.json ?
     public static final String OUR_ODS_CODE = "B82617";

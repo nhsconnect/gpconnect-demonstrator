@@ -1,5 +1,6 @@
 package uk.gov.hscic.patient;
 
+import ca.uhn.fhir.model.primitive.DateTimeDt;
 import ca.uhn.fhir.model.primitive.IdDt;
 import ca.uhn.fhir.rest.annotation.Count;
 import ca.uhn.fhir.rest.annotation.*;
@@ -170,7 +171,7 @@ public class PatientResourceProvider implements IResourceProvider {
     public Patient getPatientById(@IdParam IdType internalId) throws FHIRException {
         PatientDetails patientDetails = patientSearch.findPatientByInternalID(internalId.getIdPart());
 
-        if (patientDetails == null || patientDetails.isSensitive() || patientDetails.isDeceased() || !patientDetails.isActive()) {
+        if (patientDetails == null || patientDetails.isSensitive() || (patientDetails.isDeceased() && !patientDetails.getNhsNumber().equals(patients[PATIENT_DECEASED_14_DAYS])) || !patientDetails.isActive()) {
             throw OperationOutcomeFactory.buildOperationOutcomeException(
                     new ResourceNotFoundException("No patient details found for patient ID: " + internalId.getIdPart()),
                     SystemCode.PATIENT_NOT_FOUND, IssueType.NOTFOUND);
@@ -196,7 +197,7 @@ public class PatientResourceProvider implements IResourceProvider {
         PatientDetails patientDetails = patientSearch.findPatient(nhsNumber.fromToken(tokenParam));
 
         // ie does not return a deceased, inactive or sensitive patient in the list 
-        return null == patient || patient.getDeceased() != null || !patientDetails.isActive() || patientDetails.isSensitive() ? Collections.emptyList()
+        return null == patient || patient.getDeceased() != null && patient.getIdentifier().equals(patients[PATIENT_DECEASED_14_DAYS]) || !patientDetails.isActive() || patientDetails.isSensitive() ? Collections.emptyList()
                 : Collections.singletonList(patient);
     }
 
@@ -248,12 +249,12 @@ public class PatientResourceProvider implements IResourceProvider {
     @Operation(name = GET_STRUCTURED_RECORD_OPERATION_NAME)
     public Bundle StructuredRecordOperation(@ResourceParam Parameters params, HttpServletRequest theRequest) throws FHIRException, IOException {
 
-        String NHS = getNhsNumber(params);
+            String NHS = getNhsNumber(params);
 
         PatientDetails patientDetails = patientSearch.findPatient(NHS);
 
         // see https://nhsconnect.github.io/gpconnect/accessrecord_structured_development_retrieve_patient_record.html#error-handling
-        if (patientDetails == null || patientDetails.isSensitive() || patientDetails.isDeceased() || !patientDetails.isActive()) {
+        if (patientDetails == null || patientDetails.isSensitive() || (patientDetails.isDeceased() && !patientDetails.getNhsNumber().equals(patients[PATIENT_DECEASED_14_DAYS]) )  || !patientDetails.isActive()) {
             throw OperationOutcomeFactory.buildOperationOutcomeException(
                     new ResourceNotFoundException("No patient details found for patient ID: " + NHS),
                     SystemCode.PATIENT_NOT_FOUND, IssueType.NOTFOUND);
@@ -289,6 +290,14 @@ public class PatientResourceProvider implements IResourceProvider {
         if (patient.getIdentifierFirstRep()
                 .getValue().equals(NHS)) {
             structuredBundle.addEntry().setResource(patient);
+        }
+        
+         if (NHS != null && NHS.equals(patients[PATIENT_DECEASED_14_DAYS])) {
+            Calendar cal = Calendar.getInstance();
+            // 1.5.1 patient 18 death date always 14 days earlier than now so in middle of 28 days windows when 404 is returned
+            cal.add(Calendar.DATE, -14);
+            DateTimeType deceased = (DateTimeType) new DateTimeType(cal.getTime());
+            patient.setDeceased(deceased);
         }
 
         //Organization from patient

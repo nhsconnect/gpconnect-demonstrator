@@ -1,6 +1,5 @@
 package uk.gov.hscic.patient;
 
-import ca.uhn.fhir.model.primitive.DateTimeDt;
 import ca.uhn.fhir.model.primitive.IdDt;
 import ca.uhn.fhir.rest.annotation.Count;
 import ca.uhn.fhir.rest.annotation.*;
@@ -61,8 +60,10 @@ import org.hl7.fhir.dstu3.model.ListResource.ListEntryComponent;
 import org.hl7.fhir.dstu3.model.OperationOutcome.OperationOutcomeIssueComponent;
 import org.hl7.fhir.dstu3.model.Patient.ContactComponent;
 import org.springframework.beans.factory.annotation.Value;
+import static uk.gov.hscic.InteractionId.REST_SEARCH_PATIENTS_DOCUMENTS;
 import uk.gov.hscic.SystemConstants;
 import static uk.gov.hscic.SystemConstants.*;
+import static uk.gov.hscic.SystemHeader.SSP_INTERACTIONID;
 import static uk.gov.hscic.SystemHeader.SSP_TRACEID;
 import static uk.gov.hscic.SystemURL.SD_CC_EXT_NHS_COMMUNICATION;
 import static uk.gov.hscic.SystemURL.VS_GPC_ERROR_WARNING_CODE;
@@ -171,19 +172,27 @@ public class PatientResourceProvider implements IResourceProvider {
     }
     
     /**
-     * Check if its patient 18 (deceased 28 days)
+     * Check if its patient 18 (deceased 28 days) and the request is search patient documents
+     * @param theRequest accesses http headers so we can check the interaction id
      * @param nhsNumber
-     * @return boolean true for return patient
+     * @return boolean true if this is patient 18
      */
-    private boolean checkDeceased28Days(String nhsNumber) {
-        return !INHIBIT_28_DAYS_DECEASED && nhsNumber.equals(patients[PATIENT_DECEASED_14_DAYS]);
+    private boolean isReturnDeceased28Days(HttpServletRequest theRequest, String nhsNumber) {
+        String interactionId = theRequest.getHeader(SSP_INTERACTIONID);
+        return interactionId.equals(REST_SEARCH_PATIENTS_DOCUMENTS) && nhsNumber.equals(patients[PATIENT_DECEASED_14_DAYS]);
     }
 
+    /**
+     * This method does not honour the 1.5.1 28 days criterion
+     * @param internalId
+     * @return Patient Resource
+     * @throws FHIRException 
+     */
     @Read(version = true)
     public Patient getPatientById(@IdParam IdType internalId) throws FHIRException {
         PatientDetails patientDetails = patientSearch.findPatientByInternalID(internalId.getIdPart());
 
-        if (patientDetails == null || patientDetails.isSensitive() || (patientDetails.isDeceased() && !checkDeceased28Days(patientDetails.getNhsNumber())) || !patientDetails.isActive()) {
+        if (patientDetails == null || patientDetails.isSensitive() || patientDetails.isDeceased() || !patientDetails.isActive()) {
             throw OperationOutcomeFactory.buildOperationOutcomeException(
                     new ResourceNotFoundException("No patient details found for patient ID: " + internalId.getIdPart()),
                     SystemCode.PATIENT_NOT_FOUND, IssueType.NOTFOUND);
@@ -197,19 +206,38 @@ public class PatientResourceProvider implements IResourceProvider {
         return patient;
     }
 
+    /**
+     * as at 1.5.1 the documents version of patient search must return deceased patients if they are &lt; 28 days deceased
+     * @param tokenParam
+     * @param theRequest
+     * @return List of Patient Resources
+     * @throws FHIRException 
+     */
     @Search
-    public List<Patient> getPatientsByPatientId(@RequiredParam(name = Patient.SP_IDENTIFIER) TokenParam tokenParam)
+    public List<Patient> getPatientsByPatientId(@RequiredParam(name = Patient.SP_IDENTIFIER) TokenParam tokenParam, HttpServletRequest theRequest)
             throws FHIRException {
 
-        Patient patient = getPatientByPatientId(nhsNumber.fromToken(tokenParam));
+        // Use the nhsNumber object to parse the tokenParam and get the nhs number
+        String nhsNumberStr = nhsNumber.fromToken(tokenParam);
+
+        Patient patient = getPatientByPatientId(nhsNumberStr);
+        PatientDetails patientDetails = null;
         if (null != patient) {
+            patientDetails = patientSearch.findPatient(nhsNumberStr);
             addPreferredBranchSurgeryExtension(patient);
+
+            if ( patient.getDeceased() != null && nhsNumberStr != null && isReturnDeceased28Days(theRequest, nhsNumberStr) ) {
+                Calendar cal = Calendar.getInstance();
+                // 1.5.1 patient 18 death date always 14 days earlier than now so in middle of 28 days windows when the list is returned
+                cal.add(Calendar.DATE, -14);
+                DateTimeType deceased = (DateTimeType) new DateTimeType(cal.getTime());
+                patient.setDeceased(deceased);
+            }
         }
-
-        PatientDetails patientDetails = patientSearch.findPatient(nhsNumber.fromToken(tokenParam));
-
-        // ie does not return a deceased, inactive or sensitive patient in the list 
-        return null == patient || ( patient.getDeceased() != null && !checkDeceased28Days(patient.getIdentifier().get(0).getValue())) || !patientDetails.isActive() || patientDetails.isSensitive() ? Collections.emptyList()
+        
+        // ie does not return a deceased (unless patient 18 and document patient search), inactive or sensitive patient in the list
+        return null == patient || ( patient.getDeceased() != null && !isReturnDeceased28Days(theRequest, nhsNumberStr)) || !patientDetails.isActive() || patientDetails.isSensitive() 
+                ? Collections.emptyList()
                 : Collections.singletonList(patient);
     }
 
@@ -261,12 +289,12 @@ public class PatientResourceProvider implements IResourceProvider {
     @Operation(name = GET_STRUCTURED_RECORD_OPERATION_NAME)
     public Bundle StructuredRecordOperation(@ResourceParam Parameters params, HttpServletRequest theRequest) throws FHIRException, IOException {
 
-            String NHS = getNhsNumber(params);
+        String NHS = getNhsNumber(params);
 
         PatientDetails patientDetails = patientSearch.findPatient(NHS);
 
         // see https://nhsconnect.github.io/gpconnect/accessrecord_structured_development_retrieve_patient_record.html#error-handling
-        if (patientDetails == null || patientDetails.isSensitive() || (patientDetails.isDeceased() && !checkDeceased28Days(patientDetails.getNhsNumber()) )  || !patientDetails.isActive()) {
+        if (patientDetails == null || patientDetails.isSensitive() || patientDetails.isDeceased() || !patientDetails.isActive()) {
             throw OperationOutcomeFactory.buildOperationOutcomeException(
                     new ResourceNotFoundException("No patient details found for patient ID: " + NHS),
                     SystemCode.PATIENT_NOT_FOUND, IssueType.NOTFOUND);
@@ -304,13 +332,6 @@ public class PatientResourceProvider implements IResourceProvider {
             structuredBundle.addEntry().setResource(patient);
         }
         
-         if (NHS != null && NHS.equals(patients[PATIENT_DECEASED_14_DAYS])) {
-            Calendar cal = Calendar.getInstance();
-            // 1.5.1 patient 18 death date always 14 days earlier than now so in middle of 28 days windows when 404 is returned
-            cal.add(Calendar.DATE, -14);
-            DateTimeType deceased = (DateTimeType) new DateTimeType(cal.getTime());
-            patient.setDeceased(deceased);
-        }
 
         //Organization from patient
         Set<String> orgIds = new HashSet<>();
@@ -1480,6 +1501,9 @@ public class PatientResourceProvider implements IResourceProvider {
         }
     }
 
+    /**
+     * TODO This class has no attributes and should have its methods declared as Static
+     */
     private class NhsNumber {
 
         private NhsNumber() {

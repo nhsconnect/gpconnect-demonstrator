@@ -381,7 +381,7 @@ public class StructuredBuilder {
 
         condition.setClinicalStatus(ConditionClinicalStatus.ACTIVE);
 
-        condition.addCategory(createCodeableConcept("problem-list-item", "Problem List Item", "http://hl7.org/fhir/condition-category"));
+        condition.addCategory(createCodeableConcept("problem-list-item", "Problem List Item", "https://fhir.hl7.org.uk/STU3/CodeSystem/CareConnect-ConditionCategory-1"));
 
         CodeableConcept cc = createCodeableConcept("231504006", "Mixed anxiety and depressive disorder", SNOMED_URL);
         cc.setText("Anxiety with depression");

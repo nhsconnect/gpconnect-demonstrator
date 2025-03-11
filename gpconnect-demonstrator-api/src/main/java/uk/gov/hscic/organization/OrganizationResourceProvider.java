@@ -40,7 +40,9 @@ import ca.uhn.fhir.rest.server.exceptions.ResourceNotFoundException;
 import uk.gov.hscic.OperationOutcomeFactory;
 import uk.gov.hscic.SystemCode;
 import uk.gov.hscic.SystemURL;
-import static uk.gov.hscic.common.filters.FhirRequestGenericIntercepter.throwInvalidRequest400_InvalidParameterException;
+
+import static uk.gov.hscic.common.filters.FhirRequestGenericInterceptor.throwInvalidRequest400_InvalidParameterException;
+
 import uk.gov.hscic.common.validators.IdentifierValidator;
 import uk.gov.hscic.location.LocationSearch;
 import uk.gov.hscic.model.location.LocationDetails;
@@ -94,7 +96,7 @@ public class OrganizationResourceProvider implements IResourceProvider {
 
         return IdentifierValidator.versionComparison(organizationId,
                 convertOrganizatonDetailsListToOrganizationList(Collections.singletonList(organizationDetails))
-                .get(0));
+                        .get(0));
     }
 
     @Search
@@ -234,7 +236,7 @@ public class OrganizationResourceProvider implements IResourceProvider {
     private ContactPoint getValidTelecom() {
 
         ContactPoint orgTelCom = new ContactPoint();
-        orgTelCom.addExtension().setUrl("testUrl"); // doesn't atppear to do anything
+        orgTelCom.addExtension().setUrl("testUrl"); // doesn't appear to do anything
         orgTelCom.setSystem(ContactPointSystem.PHONE);
         orgTelCom.setUse(ContactPointUse.WORK);
         // #152

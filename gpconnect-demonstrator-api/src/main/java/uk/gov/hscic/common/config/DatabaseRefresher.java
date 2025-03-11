@@ -15,7 +15,8 @@
  */
 package uk.gov.hscic.common.config;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -34,7 +35,7 @@ import java.util.stream.Collectors;
 @Transactional
 public class DatabaseRefresher {
 
-    private static final Logger LOG = Logger.getLogger(DatabaseRefresher.class);
+    private static final Logger LOG = LogManager.getLogger(DatabaseRefresher.class);
 
     @Value("${config.path}")
     private String configPath;
@@ -56,7 +57,7 @@ public class DatabaseRefresher {
                 .filter(filename -> !filename.equals("populate_patient_2.sql"))
                 .forEach(this::runSql);
 
-        // we can only do this here after ensuring that medications and the allergyintolerance tables are poplulated
+        // we can only do this here after ensuring that medications and the allergy_intolerance tables are populated
         // otherwise there's a constraint violation when populating medication_allergies, be careful changing any orderings here
         runSql("populate_patient_2.sql"); // this is the only file which currently populates the medication_allergies table
         runSql("generate_uids.sql");

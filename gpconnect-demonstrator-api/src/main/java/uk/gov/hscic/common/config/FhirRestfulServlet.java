@@ -22,7 +22,7 @@ import org.springframework.beans.factory.annotation.Value;
 import uk.gov.hscic.SystemHeader;
 import uk.gov.hscic.appointments.AppointmentResourceProvider;
 import uk.gov.hscic.common.filters.FhirRequestAuthInterceptor;
-import uk.gov.hscic.common.filters.FhirRequestGenericIntercepter;
+import uk.gov.hscic.common.filters.FhirRequestGenericInterceptor;
 import uk.gov.hscic.common.filters.PatientJwtValidator;
 import uk.gov.hscic.location.LocationResourceProvider;
 import uk.gov.hscic.metadata.GpConnectServerCapabilityStatementProvider;
@@ -41,25 +41,25 @@ public class FhirRestfulServlet extends RestfulServer {
 
     @Value("${serverBaseUrl}")
     private String serverBaseUrl;
-    
+
     @Override
     protected void initialize() throws ServletException {
-        
+
         FhirContext ctx = FhirContext.forDstu3();
         ctx.setParserErrorHandler(new StrictErrorHandler());
-        
+
         // version required on capability statement operation definition
         // see https://hapifhir.io/doc_resource_references.html
         ctx.getParserOptions().setStripVersionsFromReferences(false);
-        
+
         // This explicit call does not work
         ///ctx.getParserOptions().setDontStripVersionsFromReferencesAtPaths("CapabilityStatement");
-        
+
         setFhirContext(ctx);
         setETagSupport(ETagSupportEnum.ENABLED);
-       
+
         setServerAddressStrategy(new HardcodedServerAddressStrategy(serverBaseUrl));
-        
+
         setResourceProviders(Arrays.asList(
                 applicationContext.getBean(PatientResourceProvider.class),
                 applicationContext.getBean(OrganizationResourceProvider.class),
@@ -69,7 +69,7 @@ public class FhirRestfulServlet extends RestfulServer {
                 applicationContext.getBean(AppointmentResourceProvider.class),
                 //applicationContext.getBean(ScheduleResourceProvider.class), // #183
                 applicationContext.getBean(SlotResourceProvider.class)
-				// Documents
+                // Documents
                 //applicationContext.getBean(DocumentReferenceResourceProvider.class),
                 //applicationContext.getBean(BinaryResourceProvider.class)
         ));
@@ -106,12 +106,12 @@ public class FhirRestfulServlet extends RestfulServer {
 
         registerInterceptor(new CorsInterceptor(config));
         registerInterceptor(applicationContext.getBean(FhirRequestAuthInterceptor.class));
-        registerInterceptor(applicationContext.getBean(FhirRequestGenericIntercepter.class));
+        registerInterceptor(applicationContext.getBean(FhirRequestGenericInterceptor.class));
         registerInterceptor(applicationContext.getBean(PatientJwtValidator.class));
-        
+
         // #215 don't populate Bundle.entry.fullurl
         registerInterceptor(new PostProcessor());
-        
+
         GpConnectServerCapabilityStatementProvider capStatementProvider = new GpConnectServerCapabilityStatementProvider(this);
         super.setServerConformanceProvider(capStatementProvider);
     }

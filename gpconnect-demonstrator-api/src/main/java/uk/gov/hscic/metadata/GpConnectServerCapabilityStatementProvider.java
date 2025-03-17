@@ -21,7 +21,7 @@ import static uk.gov.hscic.SystemURL.OD_GPC_GET_STRUCTURED_RECORD;
 import static uk.gov.hscic.SystemURL.OD_GPC_REGISTER_PATIENT;
 
 import uk.gov.hscic.SystemVariable;
-import uk.gov.hscic.common.filters.FhirRequestGenericInterceptor;
+import uk.gov.hscic.common.filters.FhirRequestGenericIntercepter;
 
 import static uk.gov.hscic.patient.PatientResourceProvider.GET_STRUCTURED_RECORD_OPERATION_NAME;
 import static uk.gov.hscic.patient.PatientResourceProvider.REGISTER_PATIENT_OPERATION_NAME;
@@ -69,7 +69,7 @@ public class GpConnectServerCapabilityStatementProvider extends ServerCapability
                         capabilityFile = "capability.json";
                 }
                 // read a json capability file
-                String capabilityJson = new String(Files.readAllBytes(Paths.get(FhirRequestGenericInterceptor.getConfigPath() + "/" + capabilityFile)));
+                String capabilityJson = new String(Files.readAllBytes(Paths.get(FhirRequestGenericIntercepter.getConfigPath() + "/" + capabilityFile)));
                 FhirContext ctx = FhirContext.forDstu3();
                 capabilityStatement = (CapabilityStatement) ctx.newJsonParser().parseResource(capabilityJson);
             } catch (IOException ex) {

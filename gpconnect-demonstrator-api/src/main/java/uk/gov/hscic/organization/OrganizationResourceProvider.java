@@ -41,7 +41,7 @@ import uk.gov.hscic.OperationOutcomeFactory;
 import uk.gov.hscic.SystemCode;
 import uk.gov.hscic.SystemURL;
 
-import static uk.gov.hscic.common.filters.FhirRequestGenericInterceptor.throwInvalidRequest400_InvalidParameterException;
+import static uk.gov.hscic.common.filters.FhirRequestGenericIntercepter.throwInvalidRequest400_InvalidParameterException;
 
 import uk.gov.hscic.common.validators.IdentifierValidator;
 import uk.gov.hscic.location.LocationSearch;

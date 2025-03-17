@@ -5,7 +5,7 @@ import java.util.List;
 
 import static uk.gov.hscic.SystemURL.ID_ODS_ORGANIZATION_CODE;
 import static uk.gov.hscic.SystemURL.ID_SDS_USER_ID;
-import static uk.gov.hscic.common.filters.FhirRequestGenericInterceptor.throwInvalidRequest400_BadRequestException;
+import static uk.gov.hscic.common.filters.FhirRequestGenericIntercepter.throwInvalidRequest400_BadRequestException;
 
 public class WebTokenValidator {
 

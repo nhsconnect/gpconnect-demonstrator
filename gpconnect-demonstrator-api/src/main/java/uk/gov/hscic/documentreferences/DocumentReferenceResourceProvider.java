@@ -32,7 +32,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import static uk.gov.hscic.SystemConstants.SNOMED_URL;
 import static uk.gov.hscic.SystemURL.ID_CROSS_CARE_SETTIING;
-import static uk.gov.hscic.common.filters.FhirRequestGenericInterceptor.throwUnprocessableEntityInvalid422_ParameterException;
+import static uk.gov.hscic.common.filters.FhirRequestGenericIntercepter.throwUnprocessableEntityInvalid422_ParameterException;
 
 import uk.gov.hscic.patient.PatientResourceProvider;
 

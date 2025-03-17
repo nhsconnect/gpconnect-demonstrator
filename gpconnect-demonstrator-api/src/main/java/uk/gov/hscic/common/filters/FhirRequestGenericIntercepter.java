@@ -43,9 +43,9 @@ import uk.gov.hscic.common.filters.model.Interactions.Interaction;
 import uk.gov.hscic.common.ldap.model.ProviderRouting;
 
 @Component
-public class FhirRequestGenericInterceptor extends InterceptorAdapter {
+public class FhirRequestGenericIntercepter extends InterceptorAdapter {
 
-    private static final Logger LOG = LogManager.getLogger(FhirRequestGenericInterceptor.class);
+    private static final Logger LOG = LogManager.getLogger(FhirRequestGenericIntercepter.class);
     private static String sConfigPath = null;
 
     /**
@@ -235,7 +235,7 @@ public class FhirRequestGenericInterceptor extends InterceptorAdapter {
      * 404 Resource Not Found
      *
      * @param exceptionMessage
-     * @param resource         String name of resource type
+     * @param resource String name of resource type
      */
     private static void throwResourceNotFoundException(String exceptionMessage, String resource) {
         String systemCode = null;
@@ -274,13 +274,13 @@ public class FhirRequestGenericInterceptor extends InterceptorAdapter {
      */
     @Override
     public BaseServerResponseException preProcessOutgoingException(RequestDetails theRequestDetails,
-                                                                   Throwable theException, HttpServletRequest theServletRequest) throws ServletException {
+            Throwable theException, HttpServletRequest theServletRequest) throws ServletException {
 
         LOG.info("Response Exception");
         LOG.info(theException.getMessage());
         LOG.info("stackTrace: ", theException);
 
-        // This string match is really crude, and it's not great, but I can't see
+        // This string match is really crude and it's not great, but I can't see
         // how else to pick up on just the relevant exceptions!
         if (theException instanceof InvalidRequestException
                 && theException.getMessage().contains("Invalid attribute value")) {
@@ -389,7 +389,7 @@ public class FhirRequestGenericInterceptor extends InterceptorAdapter {
             // If the OperationalOutcome is already set, just return it.
             return null == baseServerResponseException.getOperationOutcome()
                     ? OperationOutcomeFactory.buildOperationOutcomeException(baseServerResponseException,
-                    SystemCode.BAD_REQUEST, IssueType.INVALID)
+                            SystemCode.BAD_REQUEST, IssueType.INVALID)
                     : baseServerResponseException;
         }
 
@@ -438,7 +438,7 @@ public class FhirRequestGenericInterceptor extends InterceptorAdapter {
                             interactionOperation));
         }
 
-        // can we retrieve a resource based in this - if it's null we say it's
+        // can we retireve a resource based in this - if it's null we say it's
         // an unknown resource
         // otherwise we pass it in?
         // if(interaction != null) {
@@ -496,7 +496,7 @@ public class FhirRequestGenericInterceptor extends InterceptorAdapter {
         } else {
             throwUnprocessableEntityInvalid422_ParameterException(
                     "One or both of the identifier system and value are missing from given identifier : "
-                            + identifiers[0]);
+                    + identifiers[0]);
         }
     }
 
@@ -599,7 +599,7 @@ public class FhirRequestGenericInterceptor extends InterceptorAdapter {
 
             // generalised to not expect the fhir path to be at any specific location
             if (requestUri.contains("/fhir/")) {
-                // non-greedy wildcard so only match to the first occurrence
+                // non greedy wildcard so only match to the first occurrence
                 resource = requestUri.replaceFirst("^.*?/fhir/", "").replaceFirst("/.*$", "");
             } else {
                 throwInvalidRequest400_BadRequestException("Cannot extract resource name from Uri " + requestUri);

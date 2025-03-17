@@ -19,7 +19,7 @@ package uk.gov.hscic.common.validators;
 import java.util.function.BooleanSupplier;
 import java.util.function.Supplier;
 
-import static uk.gov.hscic.common.filters.FhirRequestGenericInterceptor.throwUnprocessableEntity422_InvalidResourceException;
+import static uk.gov.hscic.common.filters.FhirRequestGenericIntercepter.throwUnprocessableEntity422_InvalidResourceException;
 
 /**
  * ValidatorChecker (VC)

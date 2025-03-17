@@ -58,9 +58,9 @@ import static uk.gov.hscic.appointments.AppointmentValidation.APPOINTMENT_COMMEN
 import static uk.gov.hscic.appointments.AppointmentValidation.APPOINTMENT_DESCRIPTION_LENGTH;
 import uk.gov.hscic.common.validators.VC;
 import uk.gov.hscic.model.appointment.ScheduleDetail;
-import static uk.gov.hscic.common.filters.FhirRequestGenericInterceptor.throwInvalidRequest400_BadRequestException;
-import static uk.gov.hscic.common.filters.FhirRequestGenericInterceptor.throwUnprocessableEntityInvalid422_ParameterException;
-import static uk.gov.hscic.common.filters.FhirRequestGenericInterceptor.throwUnprocessableEntity422_InvalidResourceException;
+import static uk.gov.hscic.common.filters.FhirRequestGenericIntercepter.throwInvalidRequest400_BadRequestException;
+import static uk.gov.hscic.common.filters.FhirRequestGenericIntercepter.throwUnprocessableEntityInvalid422_ParameterException;
+import static uk.gov.hscic.common.filters.FhirRequestGenericIntercepter.throwUnprocessableEntity422_InvalidResourceException;
 import static uk.gov.hscic.patient.PatientResourceProvider.createCodeableConcept;
 
 @Component

@@ -76,8 +76,8 @@ import static uk.gov.hscic.SystemURL.VS_GPC_ERROR_WARNING_CODE;
 
 import uk.gov.hscic.model.telecom.TelecomDetails;
 
-import static uk.gov.hscic.common.filters.FhirRequestGenericInterceptor.throwInvalidRequest400_BadRequestException;
-import static uk.gov.hscic.common.filters.FhirRequestGenericInterceptor.throwUnprocessableEntity422_InvalidResourceException;
+import static uk.gov.hscic.common.filters.FhirRequestGenericIntercepter.throwInvalidRequest400_BadRequestException;
+import static uk.gov.hscic.common.filters.FhirRequestGenericIntercepter.throwUnprocessableEntity422_InvalidResourceException;
 
 import uk.gov.hscic.common.helpers.WarningCodeExtHelper;
 

@@ -140,7 +140,6 @@ public class RefreshData {
                         element[SLOT_INDEX_ORG_ID].isEmpty() ? Collections.EMPTY_LIST : Collections.singletonList(Long.parseLong(element[SLOT_INDEX_ORG_ID])),
                         element[SLOT_INDEX_ORG_TYPE].trim().isEmpty() ? Collections.EMPTY_LIST : Collections.singletonList(element[SLOT_INDEX_ORG_TYPE].trim()),
                         deliveryChannelCode));
-
             }
         } catch (IOException e) {
             LOG.error("Error reading slots file", e);

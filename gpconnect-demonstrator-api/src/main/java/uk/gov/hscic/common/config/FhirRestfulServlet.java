@@ -22,7 +22,7 @@ import org.springframework.beans.factory.annotation.Value;
 import uk.gov.hscic.SystemHeader;
 import uk.gov.hscic.appointments.AppointmentResourceProvider;
 import uk.gov.hscic.common.filters.FhirRequestAuthInterceptor;
-import uk.gov.hscic.common.filters.FhirRequestGenericInterceptor;
+import uk.gov.hscic.common.filters.FhirRequestGenericIntercepter;
 import uk.gov.hscic.common.filters.PatientJwtValidator;
 import uk.gov.hscic.location.LocationResourceProvider;
 import uk.gov.hscic.metadata.GpConnectServerCapabilityStatementProvider;
@@ -106,7 +106,7 @@ public class FhirRestfulServlet extends RestfulServer {
 
         registerInterceptor(new CorsInterceptor(config));
         registerInterceptor(applicationContext.getBean(FhirRequestAuthInterceptor.class));
-        registerInterceptor(applicationContext.getBean(FhirRequestGenericInterceptor.class));
+        registerInterceptor(applicationContext.getBean(FhirRequestGenericIntercepter.class));
         registerInterceptor(applicationContext.getBean(PatientJwtValidator.class));
 
         // #215 don't populate Bundle.entry.fullurl

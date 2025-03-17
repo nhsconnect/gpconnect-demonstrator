@@ -44,9 +44,9 @@ import uk.gov.hscic.SystemVariable;
 import uk.gov.hscic.appointment.slot.SlotSearch;
 import uk.gov.hscic.model.appointment.SlotDetail;
 
-import static uk.gov.hscic.common.filters.FhirRequestGenericInterceptor.throwInvalidRequest400_BadRequestException;
-import static uk.gov.hscic.common.filters.FhirRequestGenericInterceptor.throwUnprocessableEntityInvalid422_ParameterException;
-import static uk.gov.hscic.common.filters.FhirRequestGenericInterceptor.throwUnprocessableEntity422_BadRequestException;
+import static uk.gov.hscic.common.filters.FhirRequestGenericIntercepter.throwInvalidRequest400_BadRequestException;
+import static uk.gov.hscic.common.filters.FhirRequestGenericIntercepter.throwUnprocessableEntityInvalid422_ParameterException;
+import static uk.gov.hscic.common.filters.FhirRequestGenericIntercepter.throwUnprocessableEntity422_BadRequestException;
 
 @Component
 public class SlotResourceProvider implements IResourceProvider {

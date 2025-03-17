@@ -5,6 +5,8 @@ import java.util.Arrays;
 import java.util.Base64;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.hl7.fhir.dstu3.model.OperationOutcome.IssueType;
 import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Component;
@@ -33,12 +35,13 @@ import uk.gov.hscic.SystemCode;
 import uk.gov.hscic.common.filters.model.WebToken;
 import uk.gov.hscic.common.filters.model.WebTokenValidator;
 
-import static uk.gov.hscic.common.filters.FhirRequestGenericInterceptor.throwInvalidRequest400_BadRequestException;
-import static uk.gov.hscic.common.filters.FhirRequestGenericInterceptor.throwUnprocessableEntity422_BadRequestException;
+import static uk.gov.hscic.common.filters.FhirRequestGenericIntercepter.throwInvalidRequest400_BadRequestException;
+import static uk.gov.hscic.common.filters.FhirRequestGenericIntercepter.throwUnprocessableEntity422_BadRequestException;
 
 @Component
 public class WebTokenFactory {
 
+    private static final Logger LOG = LogManager.getLogger("AuthLog");
     private static final List<String> CONTENT_TYPES = Arrays.asList(
             "application/fhir+json",
             "application/fhir+xml"
@@ -160,7 +163,7 @@ public class WebTokenFactory {
             validHeaderKeys.put(entry.getKey(), entry.getValue().asText());
         }
 
-        // check nothing's missing
+        // check nothings missing
         for (String key : validHeaderKeys.keySet()) {
             if (validHeaderKeys.get(key) == null) {
                 throwInvalidRequest400_BadRequestException("Missing JWT Header key " + key);

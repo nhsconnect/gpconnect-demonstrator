@@ -29,7 +29,7 @@ import uk.gov.hscic.model.patient.PatientDetails;
 import uk.gov.hscic.model.practitioner.PractitionerDetails;
 import uk.gov.hscic.patient.details.PatientSearch;
 import uk.gov.hscic.practitioner.PractitionerSearch;
-import static uk.gov.hscic.common.filters.FhirRequestGenericInterceptor.throwUnprocessableEntity422_InvalidResourceException;
+import static uk.gov.hscic.common.filters.FhirRequestGenericIntercepter.throwUnprocessableEntity422_InvalidResourceException;
 
 @Component
 public class AppointmentValidation {

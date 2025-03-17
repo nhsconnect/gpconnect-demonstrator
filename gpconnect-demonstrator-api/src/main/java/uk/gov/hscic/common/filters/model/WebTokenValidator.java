@@ -2,10 +2,10 @@ package uk.gov.hscic.common.filters.model;
 
 import java.util.Arrays;
 import java.util.List;
-
 import static uk.gov.hscic.SystemURL.ID_ODS_ORGANIZATION_CODE;
 import static uk.gov.hscic.SystemURL.ID_SDS_USER_ID;
 import static uk.gov.hscic.common.filters.FhirRequestGenericIntercepter.throwInvalidRequest400_BadRequestException;
+import static uk.gov.hscic.common.filters.FhirRequestGenericIntercepter.throwUnprocessableEntity422_BadRequestException;
 
 public class WebTokenValidator {
 
@@ -23,7 +23,7 @@ public class WebTokenValidator {
         verifyTimeValues(webToken, futureRequestLeeway);
         verifyRequestedResourceValues(webToken);
 
-        // Checking the practitionerId and the sub are equal in value
+        // Checking the practionerId and the sub are equal in value
         if (!(webToken.getRequestingPractitioner().getId().equals(webToken.getSub()))) {
             throwInvalidRequest400_BadRequestException("JWT Practitioner ids do not match!");
         }
@@ -87,18 +87,18 @@ public class WebTokenValidator {
         int timeValidationIdentifierExp = webToken.getExp();
         long epoch = System.currentTimeMillis() / 1000;
 
-        // Checking creation time is not in the future (with a 5-second leeway
+        // Checking creation time is not in the future (with a 5 second leeway
         if (timeValidationIdentifierInt > epoch + futureRequestLeeway) {
             throwInvalidRequest400_BadRequestException("JWT Creation time is in the future");
         }
 
         // Checking the expiry time is 5 minutes after creation
-        if ((timeValidationIdentifierExp - timeValidationIdentifierInt) != 300) {
+        if ((timeValidationIdentifierExp - timeValidationIdentifierInt) != 300 ) {
             throwInvalidRequest400_BadRequestException("JWT expiry time is not 5 minutes after the creation time");
         }
 
         // #238 Checking the expiry time is not in the past
-        if (timeValidationIdentifierExp < epoch) {
+        if (timeValidationIdentifierExp < epoch ) {
             throwInvalidRequest400_BadRequestException("JWT Request time has expired");
         }
     }
@@ -120,13 +120,13 @@ public class WebTokenValidator {
         String practitionerType = webToken.getRequestingPractitioner().getResourceType();
 
         if (!"Device".equals(deviceType)) {
-            throwInvalidRequest400_BadRequestException("JWT Invalid requestingDevice resource type \"" + deviceType + "\"");
+            throwInvalidRequest400_BadRequestException("JWT Invalid requestingDevice resource type \""+deviceType+"\"");
         }
         if (!"Organization".equals(organizationType)) {
-            throwInvalidRequest400_BadRequestException("JWT Invalid requestingOrganization resource type \"" + organizationType + "\"");
+            throwInvalidRequest400_BadRequestException("JWT Invalid requestingOrganization resource type \""+organizationType+"\"");
         }
         if (!"Practitioner".equals(practitionerType)) {
-            throwInvalidRequest400_BadRequestException("JWT Invalid requestingPractitioner resource type \"" + practitionerType + "\"");
+            throwInvalidRequest400_BadRequestException("JWT Invalid requestingPractitioner resource type \""+practitionerType+"\"");
         }
     }
 }

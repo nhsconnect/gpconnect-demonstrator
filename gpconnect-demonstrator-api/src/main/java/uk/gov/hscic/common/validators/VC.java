@@ -18,14 +18,12 @@ package uk.gov.hscic.common.validators;
 
 import java.util.function.BooleanSupplier;
 import java.util.function.Supplier;
-
 import static uk.gov.hscic.common.filters.FhirRequestGenericIntercepter.throwUnprocessableEntity422_InvalidResourceException;
 
 /**
  * ValidatorChecker (VC)
  * The whole point of this is for brevity hence the short name
  * executes test and throws exception with string
- *
  * @author simonfarrow
  */
 public class VC {
@@ -34,7 +32,8 @@ public class VC {
     private final Supplier<String> message; // lambda taking no parameters and returning a String
 
     /**
-     * @param test    lambda function to evaluate
+     *
+     * @param test lambda function to evaluate
      * @param message lambda function returning text message in exception
      */
     public VC(BooleanSupplier test, Supplier<String> message) {
@@ -55,7 +54,6 @@ public class VC {
 
     /**
      * static method to perform validation checks
-     *
      * @param vcs Array of ValidationCheck objects
      */
     public static void execute(VC[] vcs) {

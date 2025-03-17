@@ -127,7 +127,7 @@ public class EndpointResolver {
 
         for (Collection<Attribute> attributes : ldapQueryRequest("ou=services, o=nhs", asidFilter)) {
             for (Attribute attribute : attributes) {
-                LOG.debug(uuid + " ASID Attribute - " + attribute.getId() + " : " + attribute.getString());
+                LOG.debug(uuid + " ASID Arribute - " + attribute.getId() + " : " + attribute.getString());
                 // Extract PartyKey
                 if ("nhsMhsPartyKey".equalsIgnoreCase(attribute.getId())) {
                     partyKey = attribute.getString();
@@ -143,7 +143,7 @@ public class EndpointResolver {
 
             for (Collection<Attribute> attributes : ldapQueryRequest("ou=services, o=nhs", mhsFilter)) {
                 for (Attribute attribute : attributes) {
-                    LOG.debug(uuid + " MHS Attribute - " + attribute.getId() + " : " + attribute.getString());
+                    LOG.debug(uuid + " MHS Arribute - " + attribute.getId() + " : " + attribute.getString());
 
                     if ("nhsMhsEndPoint".equalsIgnoreCase(attribute.getId())) {
                         endpointURL = attribute.getString();

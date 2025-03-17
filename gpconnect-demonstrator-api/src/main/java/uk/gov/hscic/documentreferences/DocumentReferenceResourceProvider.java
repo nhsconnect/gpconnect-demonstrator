@@ -10,32 +10,25 @@ import ca.uhn.fhir.rest.param.DateOrListParam;
 import ca.uhn.fhir.rest.param.DateParam;
 import ca.uhn.fhir.rest.param.TokenParam;
 import ca.uhn.fhir.rest.server.IResourceProvider;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
-
 import org.hl7.fhir.dstu3.model.*;
 import org.springframework.stereotype.Component;
-
 import java.util.List;
 import java.util.Set;
 import java.util.regex.Pattern;
-
 import org.hl7.fhir.dstu3.model.DocumentReference.DocumentReferenceContentComponent;
 import org.hl7.fhir.dstu3.model.DocumentReference.DocumentReferenceContextComponent;
 import org.hl7.fhir.dstu3.model.Enumerations.DocumentReferenceStatus;
 import org.hl7.fhir.exceptions.FHIRException;
 import org.springframework.beans.factory.annotation.Autowired;
-
 import static uk.gov.hscic.SystemConstants.SNOMED_URL;
 import static uk.gov.hscic.SystemURL.ID_CROSS_CARE_SETTIING;
 import static uk.gov.hscic.common.filters.FhirRequestGenericIntercepter.throwUnprocessableEntityInvalid422_ParameterException;
-
 import uk.gov.hscic.patient.PatientResourceProvider;
-
 import static uk.gov.hscic.patient.PatientResourceProvider.createCodeableConcept;
 
 @Component
@@ -58,14 +51,14 @@ public class DocumentReferenceResourceProvider implements IResourceProvider {
             @OptionalParam(name = "type") String type, // document type
             @OptionalParam(name = "description") String description,// document title
             @IncludeParam(allow = {"DocumentReference:patient",
-                    "DocumentReference:custodian:Organization",
-                    "DocumentReference:author:Organization",
-                    "DocumentReference:author:Practitioner"}) Set<Include> theIncludes,
+        "DocumentReference:custodian:Organization",
+        "DocumentReference:author:Organization",
+        "DocumentReference:author:Practitioner"}) Set<Include> theIncludes,
             // see https://smilecdr.com/hapi-fhir/docs/server_plain/rest_operations_search.html
             @IncludeParam(reverse = true, allow = {
-                    // NB this is what the spec says but the example in 1.0.1 has an appended Practitioner
-                    // also not sure about the path in the table for this one
-                    "PractitionerRole:practitioner"}) Set<Include> theReverseIncludes,
+        // NB this is what the spec says but the example in 1.0.1 has an appended Practitioner
+        // also not sure about the path in the table for this one
+        "PractitionerRole:practitioner"}) Set<Include> theReverseIncludes,
             @Sort SortSpec sort,
             @Count Integer count
     ) throws FHIRException {
@@ -139,6 +132,7 @@ public class DocumentReferenceResourceProvider implements IResourceProvider {
     }
 
     /**
+     *
      * @param patientId
      * @return Populated DocumentReference Resource
      */
@@ -165,7 +159,7 @@ public class DocumentReferenceResourceProvider implements IResourceProvider {
         documentReference.setStatus(DocumentReferenceStatus.CURRENT);
 
         // type
-        CodeableConcept codeableConcept = createCodeableConcept("824331000000106", "Inpatient final discharge letter", SNOMED_URL);
+        CodeableConcept codeableConcept = createCodeableConcept("824331000000106","Inpatient final discharge letter",SNOMED_URL);
         documentReference.setType(codeableConcept);
 
         // subject

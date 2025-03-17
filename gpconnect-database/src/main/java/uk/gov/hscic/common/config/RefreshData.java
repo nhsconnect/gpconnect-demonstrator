@@ -113,14 +113,14 @@ public class RefreshData {
                 // 4 end hours
                 // 5 end minutes
                 // 6 end seconds
-                // 7 Slot type code long e.g. 408443003
-                // 8 Slot type description/display string e.g. General Medical Practice
+                // 7 Slot type code long eg 408443003
+                // 8 Slot type description/display string eg General Medical Practice
                 // 9 Practitioner internal id /schedule reference eg 2
                 // 10 Slot Status FREE/BUSY string
                 // 11 boolean gp connect bookable boolean
                 // 12 organization id int 1 or 2
-                // 13 organization type String e.g. Urgent care
-                // 14 sequence of PVT delivery channel codes String P In-person, T Telephone, V Video e.g. TVP
+                // 13 organization type String eg Urgent care
+                // 14 sequence of PVT delivery channel codes String P In-person, T Telephone, V Video eg TVP
 
                 // The Collections.singletonList idiom is a way of converting a single item into a list containing one item
                 // 1.2.7 allow null service type and code
@@ -194,7 +194,6 @@ public class RefreshData {
 
     /**
      * only used to set up the first two appointments on start up
-     *
      * @param slot
      * @param description
      * @return

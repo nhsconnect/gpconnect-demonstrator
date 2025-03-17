@@ -33,9 +33,7 @@ import ca.uhn.fhir.rest.param.TokenOrListParam;
 import ca.uhn.fhir.rest.param.TokenParam;
 import ca.uhn.fhir.rest.server.IResourceProvider;
 import ca.uhn.fhir.rest.server.exceptions.InternalErrorException;
-
 import java.util.TimeZone;
-
 import org.hl7.fhir.dstu3.model.CodeType;
 import org.hl7.fhir.dstu3.model.CodeableConcept;
 import org.hl7.fhir.dstu3.model.Extension;
@@ -43,7 +41,6 @@ import uk.gov.hscic.SystemURL;
 import uk.gov.hscic.SystemVariable;
 import uk.gov.hscic.appointment.slot.SlotSearch;
 import uk.gov.hscic.model.appointment.SlotDetail;
-
 import static uk.gov.hscic.common.filters.FhirRequestGenericIntercepter.throwInvalidRequest400_BadRequestException;
 import static uk.gov.hscic.common.filters.FhirRequestGenericIntercepter.throwUnprocessableEntityInvalid422_ParameterException;
 import static uk.gov.hscic.common.filters.FhirRequestGenericIntercepter.throwUnprocessableEntity422_BadRequestException;
@@ -84,10 +81,10 @@ public class SlotResourceProvider implements IResourceProvider {
             @RequiredParam(name = "status") String status,
             @OptionalParam(name = "searchFilter") TokenAndListParam searchFilters,
             @IncludeParam(allow = {"Slot:schedule",
-                    "Schedule:actor:Practitioner",
-                    "Schedule:actor:Location",
-                    "Location:managingOrganization"
-            }) Set<Include> theIncludes) {
+        "Schedule:actor:Practitioner",
+        "Schedule:actor:Location",
+        "Location:managingOrganization"
+    }) Set<Include> theIncludes) {
 
         boolean foundSchedule = false;
         for (Include anInclude : theIncludes) {
@@ -312,7 +309,6 @@ public class SlotResourceProvider implements IResourceProvider {
 
     /**
      * #218 validating timezone offsets
-     *
      * @param type String descriptor
      * @param date DateParam
      */

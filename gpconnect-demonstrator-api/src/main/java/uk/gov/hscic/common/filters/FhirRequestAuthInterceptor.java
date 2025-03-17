@@ -7,7 +7,6 @@ import ca.uhn.fhir.rest.server.exceptions.UnprocessableEntityException;
 import ca.uhn.fhir.rest.server.interceptor.auth.AuthorizationInterceptor;
 import ca.uhn.fhir.rest.server.interceptor.auth.IAuthRule;
 import ca.uhn.fhir.rest.server.interceptor.auth.RuleBuilder;
-
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -28,7 +27,6 @@ import uk.gov.hscic.common.filters.model.WebToken;
 import uk.gov.hscic.organization.OrganizationResourceProvider;
 import uk.gov.hscic.patient.PatientResourceProvider;
 import uk.gov.hscic.util.NhsCodeValidator;
-
 import static uk.gov.hscic.common.filters.FhirRequestGenericIntercepter.throwInvalidRequest400_BadRequestException;
 
 @Component
@@ -125,11 +123,11 @@ public class FhirRequestAuthInterceptor extends AuthorizationInterceptor {
     private void validateClaim(WebToken webToken, RequestDetails requestDetails) {
 
         if (requestOperation.isRead(requestDetails) && !webToken.isReadRequestedScope()) {
-            throwInvalidRequest400_BadRequestException("The claim requested scope does not match the requested operation (read)");
+            throwInvalidRequest400_BadRequestException("The claim requested scope does not match the reqested operation (read)");
         }
 
         if (requestOperation.isWrite(requestDetails) && !webToken.isWriteRequestedScope()) {
-            throwInvalidRequest400_BadRequestException("TThe claim requested scope does not match the requested operation (write)");
+            throwInvalidRequest400_BadRequestException("TThe claim requested scope does not match the reqested operation (write)");
         }
     }
 

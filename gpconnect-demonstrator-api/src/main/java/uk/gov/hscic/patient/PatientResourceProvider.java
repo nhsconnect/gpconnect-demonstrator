@@ -13,15 +13,11 @@ import ca.uhn.fhir.rest.server.exceptions.InvalidRequestException;
 import ca.uhn.fhir.rest.server.exceptions.ResourceNotFoundException;
 import ca.uhn.fhir.rest.server.exceptions.UnclassifiedServerFailureException;
 import ca.uhn.fhir.rest.server.exceptions.UnprocessableEntityException;
-
 import java.io.IOException;
-
 import static java.lang.Integer.min;
-
 import java.lang.reflect.Constructor;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-
 import org.hl7.fhir.dstu3.model.Address.AddressType;
 import org.hl7.fhir.dstu3.model.Address.AddressUse;
 import org.hl7.fhir.dstu3.model.*;
@@ -52,40 +48,30 @@ import uk.gov.hscic.patient.details.PatientStore;
 import uk.gov.hscic.practitioner.PractitionerResourceProvider;
 import uk.gov.hscic.practitioner.PractitionerRoleResourceProvider;
 import uk.gov.hscic.util.NhsCodeValidator;
-
 import javax.annotation.PostConstruct;
 import java.util.*;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import javax.servlet.http.HttpServletRequest;
-
 import static org.hl7.fhir.dstu3.model.Address.AddressUse.OLD;
 import static org.hl7.fhir.dstu3.model.Address.AddressUse.WORK;
-
 import org.hl7.fhir.dstu3.model.Bundle.BundleEntryComponent;
 import org.hl7.fhir.dstu3.model.ListResource.ListEntryComponent;
 import org.hl7.fhir.dstu3.model.OperationOutcome.OperationOutcomeIssueComponent;
 import org.hl7.fhir.dstu3.model.Patient.ContactComponent;
 import org.springframework.beans.factory.annotation.Value;
 import uk.gov.hscic.SystemConstants;
-
 import static uk.gov.hscic.SystemConstants.*;
 import static uk.gov.hscic.SystemHeader.SSP_TRACEID;
 import static uk.gov.hscic.SystemURL.SD_CC_EXT_NHS_COMMUNICATION;
 import static uk.gov.hscic.SystemURL.VS_GPC_ERROR_WARNING_CODE;
-
 import uk.gov.hscic.model.telecom.TelecomDetails;
-
 import static uk.gov.hscic.common.filters.FhirRequestGenericIntercepter.throwInvalidRequest400_BadRequestException;
 import static uk.gov.hscic.common.filters.FhirRequestGenericIntercepter.throwUnprocessableEntity422_InvalidResourceException;
-
 import uk.gov.hscic.common.helpers.WarningCodeExtHelper;
-
 import static uk.gov.hscic.patient.StructuredAllergyIntoleranceBuilder.addEmptyListNote;
 import static uk.gov.hscic.patient.StructuredAllergyIntoleranceBuilder.addEmptyReasonCode;
-
 import uk.gov.hscic.patient.details.PatientEntity;
-
 import static uk.gov.hscic.patient.StructuredBuilder.createCondition;
 
 @Component
@@ -209,7 +195,7 @@ public class PatientResourceProvider implements IResourceProvider {
 
         PatientDetails patientDetails = patientSearch.findPatient(nhsNumber.fromToken(tokenParam));
 
-        // ie does not return a deceased, inactive or sensitive patient in the list 
+        // ie does not return a deceased, inactive or sensitive patient in the list
         return null == patient || patient.getDeceased() != null || !patientDetails.isActive() || patientDetails.isSensitive() ? Collections.emptyList()
                 : Collections.singletonList(patient);
     }
@@ -255,7 +241,7 @@ public class PatientResourceProvider implements IResourceProvider {
 
     @Search(compartmentName = "Appointment")
     public List<Appointment> getPatientAppointments(@IdParam IdType patientLocalId, @Sort SortSpec sort,
-                                                    @Count Integer count, @OptionalParam(name = "start") DateAndListParam startDate) {
+            @Count Integer count, @OptionalParam(name = "start") DateAndListParam startDate) {
         return appointmentResourceProvider.getAppointmentsForPatientIdAndDates(patientLocalId, sort, count, startDate);
     }
 
@@ -315,12 +301,12 @@ public class PatientResourceProvider implements IResourceProvider {
         List<Reference> practitionerReferenceList = patient.getGeneralPractitioner();
 
         practitionerReferenceList.forEach(practitionerReference
-                        -> {
-                    String[] pracRef = practitionerReference.getReference().split("/");
-                    if (pracRef.length > 1) {
-                        practitionerIds.add(pracRef[1]);
-                    }
-                }
+                -> {
+            String[] pracRef = practitionerReference.getReference().split("/");
+            if (pracRef.length > 1) {
+                practitionerIds.add(pracRef[1]);
+            }
+        }
         );
 
         // ensure the flags in the static helper class are reset every time we do a query
@@ -347,7 +333,7 @@ public class PatientResourceProvider implements IResourceProvider {
             if (Arrays.asList(new String[]{patients[PATIENT_2], patients[PATIENT_3]}).contains(NHS)) {
                 structureBuilder.appendCannedResponse(configPath + "/" + hmCannedResponse.get(cannedClinicalArea), structuredBundle, patient, cannedCLinicalAreaParameters.get(cannedClinicalArea));
             } else {
-                // only patients 2 and 3 have canned responses all the rest not.
+                // only patients 2 and 3 have canned repsonses all the rest not.
                 addEmptyList(cannedClinicalArea, NHS, structuredBundle);
             }
         }
@@ -386,6 +372,7 @@ public class PatientResourceProvider implements IResourceProvider {
     }
 
     /**
+     *
      * adds an entry to the problem list pointing at a problem/Condition This
      * handles the case where an uncanned clinical area is requested and a
      * problem needs adding for patient 2 for testing purposes.
@@ -448,7 +435,7 @@ public class PatientResourceProvider implements IResourceProvider {
                         break;
                     case INCLUDE_MEDICATION_PARM:
 
-                        // ensure the problem references both a medication statement and a medication request.
+                        // ensure the problem references both a medication statment and a medication request.
                         // #371 removed the reference to the MedicationStatement
                         condition = createCondition(problemId, patient,
                                 new String[]{medicationsRequest.getResourceType() + "/" + medicationsRequest.getId()});
@@ -469,6 +456,7 @@ public class PatientResourceProvider implements IResourceProvider {
     }
 
     /**
+     *
      * @param params
      * @param uncannedClinicalAreaParameters
      * @param cannedClinicalAreaParameters
@@ -592,6 +580,7 @@ public class PatientResourceProvider implements IResourceProvider {
     }
 
     /**
+     *
      * @return new Object
      */
     private void createOperationOutcome() {
@@ -642,7 +631,7 @@ public class PatientResourceProvider implements IResourceProvider {
      * @param param
      * @param paramPart
      * @param issueType
-     * @param details   lower level details to be added to the text element
+     * @param details lower level details to be added to the text element
      */
     private void addWarningIssue(ParametersParameterComponent param, ParametersParameterComponent paramPart, IssueType issueType, String details) {
         if (operationOutcome == null) {
@@ -703,7 +692,7 @@ public class PatientResourceProvider implements IResourceProvider {
         String nnn = nhsNumber.fromPatientResource(unregisteredPatient);
 
         // see https://nhsconnect.github.io/gpconnect/foundations_use_case_register_a_patient.html#error-handling
-        // if its patient 14 spoof not on PDS and return the required error 
+        // if its patient 14 spoof not on PDS and return the required error
         if (nnn.equals(patients[PATIENT_NOTONSPINE])) {
             throw OperationOutcomeFactory.buildOperationOutcomeException(
                     new InvalidRequestException(String.format("Patient (NHS number - %s) not present on PDS", nnn)),
@@ -853,7 +842,7 @@ public class PatientResourceProvider implements IResourceProvider {
                                     default:
                                         throwInvalidRequest400_BadRequestException(
                                                 "Invalid Telecom of type phone use type " + telecom.getUse().toString().toLowerCase()
-                                                        + " in a register patient request.");
+                                                + " in a register patient request.");
                                 }
                             } else {
                                 throwInvalidRequest400_BadRequestException("Invalid Telecom - no Use type provided in a register patient request.");
@@ -871,7 +860,7 @@ public class PatientResourceProvider implements IResourceProvider {
             } else {
                 throwInvalidRequest400_BadRequestException("Telecom system is missing in a register patient request.");
             }
-        } // iterate telcom 
+        } // iterate telcom
 
         // count by useType - Only the first address is persisted at present
         HashSet<AddressUse> useTypeCount = new HashSet<>();
@@ -986,7 +975,7 @@ public class PatientResourceProvider implements IResourceProvider {
         if (patient.getDeceased() != null) {
             invalidFields.add("deceased");
         }
-        // 6 extra fields added at 1.2.2 
+        // 6 extra fields added at 1.2.2
         if (patient.hasActive()) {
             invalidFields.add("active");
         }
@@ -1183,6 +1172,7 @@ public class PatientResourceProvider implements IResourceProvider {
     }
 
     /**
+     *
      * @param code
      * @param display
      * @param vsSystem
@@ -1222,7 +1212,7 @@ public class PatientResourceProvider implements IResourceProvider {
      * from details to patient
      *
      * @param patientDetails
-     * @param patient        fhir resource
+     * @param patient fhir resource
      */
     private void addTelecoms(PatientDetails patientDetails, Patient patient) {
         for (TelecomDetails telecomDetails : patientDetails.getTelecoms()) {
@@ -1290,8 +1280,8 @@ public class PatientResourceProvider implements IResourceProvider {
         patient.addExtension(regDetailsExtension);
 
         if (patientDetails.isDeceased()) {
-            DateTimeType deceased = new DateTimeType(patientDetails.getDeceased());
-            patient.setDeceased(deceased);
+            DateTimeType decesed = new DateTimeType(patientDetails.getDeceased());
+            patient.setDeceased(decesed);
         }
 
         String managingOrganization = patientDetails.getManagingOrganization();
@@ -1590,7 +1580,7 @@ public class PatientResourceProvider implements IResourceProvider {
         }
 
         private ParametersParameterComponent getParameterByName(List<ParametersParameterComponent> parameters,
-                                                                String parameterName) {
+                String parameterName) {
             ParametersParameterComponent parameter = null;
 
             List<ParametersParameterComponent> filteredParameters = parameters.stream()
@@ -1614,8 +1604,8 @@ public class PatientResourceProvider implements IResourceProvider {
      * throws an exception on failure
      *
      * @param startDate String
-     * @param endDate   String (may be null if not a period
-     * @param sb        StringBuilder for appending derails
+     * @param endDate String (may be null if not a period
+     * @param sb StringBuilder for appending derails
      */
     private void validateStartDateParamAndEndDateParam(String startDate, String endDate, StringBuilder sb) {
         Pattern dateOnlyPattern = Pattern.compile("\\d{4}-\\d{2}-\\d{2}");
@@ -1643,13 +1633,13 @@ public class PatientResourceProvider implements IResourceProvider {
     /**
      * checks that date is in the correct format and is not in the future
      *
-     * @param date            Date object
-     * @param dateLabel       "start" or "end"
+     * @param date Date object
+     * @param dateLabel "start" or "end"
      * @param dateOnlyPattern regex for valid date strings
-     * @param sb              StringBuilder to allow appending of additional info regarding
-     *                        the nature of the failure
-     * @param result          boolean
-     * @param now             Date object
+     * @param sb StringBuilder to allow appending of additional info regarding
+     * the nature of the failure
+     * @param result boolean
+     * @param now Date object
      * @return boolean true => ok
      * @throws ParseException
      */
@@ -1752,7 +1742,7 @@ public class PatientResourceProvider implements IResourceProvider {
 
         /**
          * This needs a parameter (java!) because we are explicitly naming a
-         * ParameterPart that's not been passed
+         * ParameterPart thats not been passed
          *
          * @param paramPartName
          */

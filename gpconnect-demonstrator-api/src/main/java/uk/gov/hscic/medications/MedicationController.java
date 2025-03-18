@@ -1,6 +1,5 @@
 package uk.gov.hscic.medications;
 
-import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import uk.gov.hscic.medication.statement.MedicationStatementEntity;
@@ -17,13 +16,11 @@ import java.util.Map;
 @RequestMapping("api/")
 public class MedicationController {
 
-    private static final Logger LOG = Logger.getLogger("MedicationsLog");
-
     @Autowired
     private MedicationResourceProvider medicationResourceProvider;
 
     @GetMapping("/medication/all//{nhsnumber}")
-    public Map<String,List<String>> getAllMedications(@PathVariable("nhsnumber") String nhsnumber) {
+    public Map<String, List<String>> getAllMedications(@PathVariable("nhsnumber") String nhsnumber) {
         return medicationResourceProvider.getAllMedicationAndAllergiesForPatient(nhsnumber);
     }
 

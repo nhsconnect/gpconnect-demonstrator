@@ -5,7 +5,8 @@ import java.util.Arrays;
 import java.util.Base64;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.hl7.fhir.dstu3.model.OperationOutcome.IssueType;
 import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Component;
@@ -23,21 +24,24 @@ import ca.uhn.fhir.rest.server.exceptions.BaseServerResponseException;
 import ca.uhn.fhir.rest.server.exceptions.InvalidRequestException;
 import ca.uhn.fhir.rest.server.exceptions.UnclassifiedServerFailureException;
 import com.fasterxml.jackson.core.JsonParseException;
+
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+
 import uk.gov.hscic.OperationOutcomeFactory;
 import uk.gov.hscic.SystemCode;
 import uk.gov.hscic.common.filters.model.WebToken;
 import uk.gov.hscic.common.filters.model.WebTokenValidator;
+
 import static uk.gov.hscic.common.filters.FhirRequestGenericIntercepter.throwInvalidRequest400_BadRequestException;
 import static uk.gov.hscic.common.filters.FhirRequestGenericIntercepter.throwUnprocessableEntity422_BadRequestException;
 
 @Component
 public class WebTokenFactory {
 
-    private static final Logger LOG = Logger.getLogger("AuthLog");
+    private static final Logger LOG = LogManager.getLogger("AuthLog");
     private static final List<String> CONTENT_TYPES = Arrays.asList(
             "application/fhir+json",
             "application/fhir+xml"
@@ -49,8 +53,7 @@ public class WebTokenFactory {
     private static final String JWT_HEADER_ALG = "alg";
 
     /**
-     *
-     * @param requestDetails Hapi Fhir object describing request
+     * @param requestDetails      Hapi Fhir object describing request
      * @param futureRequestLeeway JWT time leeway in seconds
      * @return populated WebToken object
      */
@@ -190,7 +193,7 @@ public class WebTokenFactory {
 
             // Check for json objects that are not allowed
             for (String claim : new String[]{
-                "requested_record",}) // #170 requested_record is not allowed
+                    "requested_record",}) // #170 requested_record is not allowed
             {
                 if (jsonNode.get(claim) != null) {
                     throwInvalidRequest400_BadRequestException(String.format("JWT claim %s should not be present", claim));
@@ -200,9 +203,9 @@ public class WebTokenFactory {
             // These are json objects not simple data types. They should be present
             // we now see if they can be converted to valid fhir resources
             for (String claim : new String[]{
-                "requesting_practitioner",
-                "requesting_device",
-                "requesting_organization",}) {
+                    "requesting_practitioner",
+                    "requesting_device",
+                    "requesting_organization",}) {
                 thisClaim = claim;
 
                 if (jsonNode.get(claim) == null) {

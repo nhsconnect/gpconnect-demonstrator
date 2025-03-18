@@ -1,6 +1,7 @@
 package uk.gov.hscic.common.ldap;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -14,11 +15,13 @@ import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.net.ssl.KeyManagerFactory;
 import javax.net.ssl.TrustManagerFactory;
+
 import org.apache.directory.api.ldap.model.cursor.EntryCursor;
 import org.apache.directory.api.ldap.model.entry.Attribute;
 import org.apache.directory.api.ldap.model.message.SearchScope;
 import org.apache.directory.ldap.client.api.LdapNetworkConnection;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -30,7 +33,7 @@ import uk.gov.hscic.common.ldap.model.ProviderRouting;
 @RestController
 @RequestMapping("api/")
 public class EndpointResolver {
-    private static final Logger LOG = Logger.getLogger("LDAPLog");
+    private static final Logger LOG = LogManager.getLogger("LDAPLog");
 
     @Value("${config.path}")
     private String configPath;

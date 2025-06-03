@@ -38,56 +38,53 @@ to the [Running as a Mock Server](#running-as-a-mock-server) section
    npm install
    ```
 
-## Usage
+## Usage Steps
 
-### Processing GPC Acceptance Test Data
-
-Process the example data to generate JSON files:
-
+1. Firstly run the following command
+```bash
+npm run pd
 ```
-npm run pd [customPath]
-```
-
-- Without arguments, it uses the default path (`./ExampleData`)
-- The Example data is the output data from tests in the [gp-connect-provider-test](https://github.com/nhsconnect/gpconnect-provider-testing) project 
-- With a custom path argument, it processes data from that location
-
-### Creating a Postman Collection
-
-Generate a Postman collection from the processed test data:
-
-```
-npm run cc [testDataFilePath]
+2. On Success, run the following command (this will create the postman collection)
+```bash
+npm run cc
 ```
 
-- Without arguments, it uses the default path (`./ExampleData/output/gpcAcceptanceTestData.passed.json`)
-- With a custom path argument, it uses that file as the source
+3. Goto Postman and select `Collections` from the side menu
+   
+4. Drag the file called `GpcAcceptTestEndpoints.json` from the `_output` folder to your into the open space inside collections, or click the `+` icon and select the file location. 
 
-## Running as a Mock Server
+<img src="./readme_appendix/hint_collections.png" alt="drawing" width="200"/>
 
-To use the generated collection as a mock server:
+You can now view all the pre-arranged endpoints, and their stubbed responses. 
 
-1. Import the generated collection file (`GpcAcceptTestEndpoints.json`) into Postman
-2. In Postman, click on the collection and select "Mock" from the right sidebar
-3. Click "Create a mock server"
-4. Configure the mock server settings:
-   - Name: Give your mock server a name
+
+
+## Run the Mock Server
+
+In order to hit these mocked endpoints, you need to run a mock server within Postman.
+
+1. In Postman, right click on the imported collection and find the `Mock` item (this could be hidden in `More` option)
+
+2. Configure the mock server settings:
+   - Name: Give your mock server a name (e.g 'GP Mock Server')
    - Environment: Select an environment if needed
    - Save responses: Enable this to save responses
-5. Click "Create Mock Server"
-6. Postman will provide a URL for your mock server
+
+3. Click "Create Mock Server"
+
+4. Postman will provide a URL for your mock server - this will be used to pass to your application as the API url.
 
 The mock server will now return the example responses included in the collection when matching requests are made.
 
-## Configuring Static Responses
+## Updating The Example Responses (Optional)
 
-The mock server uses the example responses included in the Postman collection. These responses are created from the original GPC acceptance test data.
+The mock server uses the example responses included in the Postman collection.
 
-To customize the responses:
+To customize the responses, for whatever reason:
 
 1. Open the collection in Postman
-2. Navigate to a request
-3. In the "Examples" tab, you can view and edit the example responses
+2. Navigate to the request you'd like to update
+3. Expand the request and you'll see `example <name>` select this, alternatively use the `Examples` tab.  
 4. Modify the response body, headers, or status code as needed
 5. Save the changes
 
@@ -106,3 +103,4 @@ The mock server will use these updated responses when matching requests are made
 ## Contributing
 
 Contributions are welcome! Please feel free to submit a Pull Request.
+

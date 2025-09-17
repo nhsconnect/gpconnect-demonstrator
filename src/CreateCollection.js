@@ -285,12 +285,25 @@ function createRequestItem(testItem, nhsNoMap) {
     });
   }
 
+  // Add Content-Type header if we have a request body with content type
+  if (requestData.body && requestData.body.value && requestData.contentType) {
+    headers.push({
+      key: 'Content-Type',
+      value: requestData.contentType,
+    });
+  }
+
   // Create URL parameters
   const queryParams = [];
   let hasDateParams = false;
   if (requestData.parameters) {
     if (Array.isArray(requestData.parameters)) {
       requestData.parameters.forEach((param) => {
+        // Skip parameters that start with underscore (test-specific parameters)
+        if (param.name.startsWith('_')) {
+          return;
+        }
+
         // Replace NHS numbers in parameter values
         let replacedValue = replaceNHSNumbers(param.value, nhsNoMap);
 
@@ -323,22 +336,27 @@ function createRequestItem(testItem, nhsNoMap) {
       raw: decodedBody,
       options: {
         raw: {
-          language: 'json',
+          language: requestData.contentType || 'json',
         },
       },
     };
   }
 
   // Create URL
-  // Replace NHS numbers in the endpoint URL
-  const replacedEndpointUrl = replaceNHSNumbers(
-    testItem.data.endpointUrl,
-    nhsNoMap
-  );
+  // Combine endpoint URL with request URL and replace NHS numbers
+  const baseUrl = testItem.data.endpointUrl;
+  const requestPath = testItem.requestName || '';
+  const fullUrl = requestPath ? `${baseUrl}/${requestPath}` : baseUrl;
+  const replacedFullUrl = replaceNHSNumbers(fullUrl, nhsNoMap);
+
   const url = {
-    raw: replacedEndpointUrl,
-    host: [replacedEndpointUrl.replace(/^https?:\/\//, '').split('/')[0]],
-    path: replacedEndpointUrl.replace(/^https?:\/\/[^/]+\//, '').split('/'),
+    raw: replacedFullUrl,
+    protocol: replacedFullUrl.match(/^https?/)[0],
+    host: [replacedFullUrl.replace(/^https?:\/\//, '').split('/')[0]],
+    path: replacedFullUrl
+      .replace(/^https?:\/\/[^/]+\//, '')
+      .split('/')
+      .filter((p) => p !== ''),
   };
 
   // Add query parameters to URL if they exist
@@ -376,20 +394,31 @@ function createRequestItem(testItem, nhsNoMap) {
         }
       : null;
 
+  // Create originalRequest URL with the complete path
+  const originalBaseUrl = testItem.data.endpointUrl;
+  const originalRequestPath = testItem.requestName || '';
+  const originalFullUrl = originalRequestPath
+    ? `${originalBaseUrl}/${originalRequestPath}`
+    : originalBaseUrl;
+
   const originalRequestUrl = {
-    raw: testItem.data.endpointUrl,
-    host: [testItem.data.endpointUrl.replace(/^https?:\/\//, '').split('/')[0]],
-    path: testItem.data.endpointUrl
+    raw: originalFullUrl,
+    protocol: originalFullUrl.match(/^https?/)[0],
+    host: [originalFullUrl.replace(/^https?:\/\//, '').split('/')[0]],
+    path: originalFullUrl
       .replace(/^https?:\/\/[^/]+\//, '')
-      .split('/'),
+      .split('/')
+      .filter((p) => p !== ''),
   };
 
   // Add query parameters to URL if they exist
   if (requestData.parameters && requestData.parameters.length > 0) {
-    originalRequestUrl.query = requestData.parameters.map((param) => ({
-      key: param.name,
-      value: param.value,
-    }));
+    originalRequestUrl.query = requestData.parameters
+      .filter((param) => !param.name.startsWith('_')) // Filter out underscore parameters
+      .map((param) => ({
+        key: param.name,
+        value: param.value,
+      }));
   }
 
   const exampleResponse = new sdk.Response({

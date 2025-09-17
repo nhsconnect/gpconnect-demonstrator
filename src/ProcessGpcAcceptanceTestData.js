@@ -394,11 +394,12 @@ async function processGpcAcceptanceTestData(
           )
           .join('\n');
 
+        // TEMP COMMENT OUT AS CAUSES DOWNSTREAM ISSUES IN WIREMOCK
         // Replace empty requestParameters tag with populated one
-        xmlContent = xmlContent.replace(
-          /<requestParameters\s*\/>/,
-          `<requestParameters>\n${queryParamsXml}\n    </requestParameters>`
-        );
+        // xmlContent = xmlContent.replace(
+        //     /<requestParameters\s*\/>/,
+        //     `<requestParameters>\n${queryParamsXml}\n    </requestParameters>`
+        // );
 
         // Write the updated XML back to the file
         console.log(

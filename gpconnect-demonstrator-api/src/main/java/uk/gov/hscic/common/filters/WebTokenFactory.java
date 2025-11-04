@@ -5,7 +5,8 @@ import java.util.Arrays;
 import java.util.Base64;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.hl7.fhir.dstu3.model.OperationOutcome.IssueType;
 import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Component;
@@ -37,7 +38,7 @@ import static uk.gov.hscic.common.filters.FhirRequestGenericIntercepter.throwUnp
 @Component
 public class WebTokenFactory {
 
-    private static final Logger LOG = Logger.getLogger("AuthLog");
+    private static final Logger LOG = LogManager.getLogger("AuthLog");
     private static final List<String> CONTENT_TYPES = Arrays.asList(
             "application/fhir+json",
             "application/fhir+xml"

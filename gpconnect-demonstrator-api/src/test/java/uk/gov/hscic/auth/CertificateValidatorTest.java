@@ -1,29 +1,26 @@
 package uk.gov.hscic.auth;
 
 import java.security.cert.X509Certificate;
-import static org.junit.Assert.assertNotNull;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.x509;
 import org.springframework.test.context.TestPropertySource;
-import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import uk.gov.hscic.common.ldap.EndpointResolver;
 
-@RunWith(SpringRunner.class)
 @TestPropertySource(properties = {
-    "gp.connect.provider.routing.filename = providerRouting.json",
-    "ldap.context.keystore = ldapKeystore.jks",
-    "ldap.context.keystore.pwd = password",
-    "ldap.context.keystore.type = JKS",
-    "ldap.context.port = 10636",
-    "ldap.context.url = localhost",
-    "ldap.context.useSSL = false"
+        "gp.connect.provider.routing.filename = providerRouting.json",
+        "ldap.context.keystore = ldapKeystore.jks",
+        "ldap.context.keystore.pwd = password",
+        "ldap.context.keystore.type = JKS",
+        "ldap.context.port = 10636",
+        "ldap.context.url = localhost",
+        "ldap.context.useSSL = false"
 })
 @WebMvcTest(EndpointResolver.class)
 public class CertificateValidatorTest {
@@ -42,10 +39,10 @@ public class CertificateValidatorTest {
         assertNotNull(x);
 
         mockMvc.perform(get("/api/ldap/endpointLookup")
-                .secure(true)
-                .param("odsCode", "GPC001")
-                .param("interactionId", "interactionId_A")
-                .with(x509(x)))
+                        .secure(true)
+                        .param("odsCode", "GPC001")
+                        .param("interactionId", "interactionId_A")
+                        .with(x509(x)))
                 .andDo(print())
                 .andExpect(status().isOk());
     }

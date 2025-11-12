@@ -15,7 +15,7 @@
  */
 package uk.gov.hscic.common.config;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -33,7 +33,7 @@ import java.util.stream.Collectors;
 @Service
 @Transactional
 public class DatabaseRefresher {
-    private static final Logger LOG = Logger.getLogger(DatabaseRefresher.class);
+    private static final org.apache.logging.log4j.Logger LOG = LogManager.getLogger(RefreshData.class);
 
     @Value("${config.path}")
     private String configPath;

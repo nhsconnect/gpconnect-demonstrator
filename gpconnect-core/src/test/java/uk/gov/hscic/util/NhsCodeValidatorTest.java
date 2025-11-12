@@ -1,7 +1,8 @@
 package uk.gov.hscic.util;
 
+import org.junit.jupiter.api.Test;
+
 import static org.assertj.core.api.Assertions.assertThat;
-import org.junit.Test;
 
 public final class NhsCodeValidatorTest {
 

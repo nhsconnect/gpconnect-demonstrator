@@ -14,7 +14,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang3.StringUtils;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
 import org.hl7.fhir.dstu3.model.OperationOutcome.IssueType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -37,6 +37,7 @@ import uk.gov.hscic.SystemCode;
 import uk.gov.hscic.SystemHeader;
 import uk.gov.hscic.SystemParameter;
 import uk.gov.hscic.auth.CertificateValidator;
+import uk.gov.hscic.common.config.RefreshData;
 import uk.gov.hscic.common.filters.model.Interactions;
 import uk.gov.hscic.common.filters.model.Interactions.Interaction;
 import uk.gov.hscic.common.ldap.model.ProviderRouting;
@@ -44,7 +45,7 @@ import uk.gov.hscic.common.ldap.model.ProviderRouting;
 @Component
 public class FhirRequestGenericIntercepter extends InterceptorAdapter {
 
-    private static final Logger LOG = Logger.getLogger(FhirRequestGenericIntercepter.class);
+    private static final org.apache.logging.log4j.Logger LOG = LogManager.getLogger(RefreshData.class);
     private static String sConfigPath = null;
 
     /**

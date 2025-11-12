@@ -1,9 +1,8 @@
 package uk.gov.hscic.patient.details;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import org.junit.Before;
-import org.junit.Test;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import uk.gov.hscic.model.patient.PatientDetails;
 import uk.gov.hscic.practitioner.PractitionerEntity;
 
@@ -12,7 +11,7 @@ public class PatientEntityToDetailsTransformerTest {
 
     private PatientEntityToDetailsTransformer transformer;
 
-    @Before
+    @BeforeEach
     public void setUp() throws Exception {
         transformer = new PatientEntityToDetailsTransformer();
     }

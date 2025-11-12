@@ -27,7 +27,8 @@ import java.util.Locale;
 import java.util.Map;
 import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Component;
@@ -44,7 +45,7 @@ import uk.gov.hscic.common.util.NhsCodeValidator;
 @Component
 public class FhirRequestAuthInterceptor extends AuthorizationInterceptor {
 
-    private static final Logger LOG = Logger.getLogger("AuthLog");
+    private static final Logger LOG = LoggerFactory.getLogger("AuthLog");
     private static final String PERMITTED_MEDIA_TYPE_HEADER_REGEX = "application/(xml|json)\\+fhir(;charset=utf-8)?";
 
     private static final String JWT_HEADER_TYP = "typ";

@@ -41,7 +41,7 @@ public class PatientSearch {
     private PatientEntityToSummaryTransformer patientEntityToSummaryTransformer;
 
     public List<PatientSummary> findAllPatients() {
-        final Iterable<PatientEntity> patients = patientRepository.findAll(new Sort("nhsNumber"));
+        final Iterable<PatientEntity> patients = patientRepository.findAll(Sort.by("nhsNumber"));
 
         return CollectionUtils.collect(patients, patientEntityToSummaryTransformer, new ArrayList<>());
     }

@@ -7,7 +7,8 @@ import java.nio.charset.StandardCharsets;
 import java.util.Date;
 import java.util.List;
 import org.apache.commons.lang3.time.DateUtils;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -19,7 +20,7 @@ import uk.gov.hscic.order.store.OrderStore;
 
 @Service
 public class RefreshData {
-    private static final Logger LOG = Logger.getLogger(RefreshData.class);
+    private static final Logger LOG = LogManager.getLogger(RefreshData.class);
 
     @Value("${config.path}")
     private String configPath;

@@ -54,6 +54,13 @@
             <artifactId>spring-security-test</artifactId>
         </dependency>
 
+        <!-- JUnit 4 support for Spring Boot 2.x (which defaults to JUnit 5) -->
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <scope>test</scope>
+        </dependency>
+
         <dependency>
             <groupId>javax.activation</groupId>
             <artifactId>activation</artifactId>
@@ -61,11 +68,15 @@
             <type>jar</type>
         </dependency>
 
+        <!-- Log4j 2.x core dependencies (already in parent, explicitly declared here) -->
         <dependency>
-            <groupId>log4j</groupId>
-            <artifactId>log4j</artifactId>
-            <version>1.2.17</version>
-            <type>jar</type>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-core</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-api</artifactId>
         </dependency>
     </dependencies>
 

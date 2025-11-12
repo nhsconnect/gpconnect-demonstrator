@@ -8,10 +8,11 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import org.apache.http.HttpException;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class DefaultHeaderFilter implements Filter {
-    private static final Logger LOG = Logger.getLogger(DefaultHeaderFilter.class);
+    private static final Logger LOG = LoggerFactory.getLogger(DefaultHeaderFilter.class);
 
     @Override
     public void init(FilterConfig config) throws ServletException { }

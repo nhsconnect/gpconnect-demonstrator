@@ -21,7 +21,8 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -32,7 +33,7 @@ import uk.gov.hscic.common.ldap.model.ProviderRouting;
 
 @Component
 public class FhirRequestGenericIntercepter extends InterceptorAdapter {
-    private static final Logger LOG = Logger.getLogger(FhirRequestGenericIntercepter.class);
+    private static final Logger LOG = LoggerFactory.getLogger(FhirRequestGenericIntercepter.class);
 
     private static final String SSP_FROM = "Ssp-From";
     private static final String SSP_INTERACTIONID = "Ssp-InteractionID";

@@ -31,7 +31,7 @@ import uk.gov.hscic.common.ldap.model.ProviderRouting;
 @RestController
 @RequestMapping("api/")
 public class EndpointResolver {
-    private static final Logger LOG = LogManager.getLogger("LDAPLog");
+    private static final Logger LOG = LogManager.getLogger(EndpointResolver.class);
 
     @Value("${config.path}")
     private String configPath;

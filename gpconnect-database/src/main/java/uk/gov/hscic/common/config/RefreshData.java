@@ -1,8 +1,7 @@
 package uk.gov.hscic.common.config;
 
 import com.google.common.io.Files;
-import org.apache.commons.lang3.time.DateUtils;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -45,7 +44,7 @@ public class RefreshData {
     private static final int SLOT_INDEX_ORG_ID = 12;
     private static final int SLOT_INDEX_ORG_TYPE = 13;
 
-    private static final Logger LOG = Logger.getLogger(RefreshData.class);
+    private static final org.apache.logging.log4j.Logger LOG = LogManager.getLogger(RefreshData.class);
 
     @Value("${config.path}")
     private String configPath;

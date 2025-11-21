@@ -7,7 +7,6 @@ import javax.servlet.annotation.WebServlet;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.web.cors.CorsConfiguration;
@@ -19,6 +18,7 @@ import ca.uhn.fhir.rest.server.HardcodedServerAddressStrategy;
 import ca.uhn.fhir.rest.server.RestfulServer;
 import ca.uhn.fhir.rest.server.interceptor.CorsInterceptor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.web.context.support.SpringBeanAutowiringSupport;
 import uk.gov.hscic.SystemHeader;
 import uk.gov.hscic.appointments.AppointmentResourceProvider;
 import uk.gov.hscic.common.filters.FhirRequestAuthInterceptor;
@@ -31,7 +31,6 @@ import uk.gov.hscic.patient.PatientResourceProvider;
 import uk.gov.hscic.practitioner.PractitionerResourceProvider;
 import uk.gov.hscic.slots.SlotResourceProvider;
 
-@Configuration
 @WebServlet(urlPatterns = {"/fhir/*"}, displayName = "FHIR Server")
 public class FhirRestfulServlet extends RestfulServer {
     private static final long serialVersionUID = 1L;
@@ -44,7 +43,9 @@ public class FhirRestfulServlet extends RestfulServer {
     
     @Override
     protected void initialize() throws ServletException {
-        
+        // Enable Spring autowiring for servlet container-managed servlet
+        SpringBeanAutowiringSupport.processInjectionBasedOnCurrentContext(this);
+
         FhirContext ctx = FhirContext.forDstu3();
         ctx.setParserErrorHandler(new StrictErrorHandler());
         

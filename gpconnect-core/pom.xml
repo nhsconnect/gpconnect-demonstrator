@@ -29,20 +29,7 @@
     <packaging>jar</packaging>
 
     <dependencies>
-    	<dependency>
-			<groupId>ca.uhn.hapi.fhir</groupId>
-			<artifactId>hapi-fhir-structures-dstu3</artifactId>
-			<version>3.0.0</version>
-		</dependency>
-		<dependency>
-			<groupId>ca.uhn.hapi.fhir</groupId>
-			<artifactId>hapi-fhir-validation-resources-dstu3</artifactId>
-			<version>3.0.0</version>
-		</dependency>
-        <dependency>
-            <groupId>org.apache.commons</groupId>
-            <artifactId>commons-lang3</artifactId>
-        </dependency>
+        <!-- JUnit 4 for existing test (NhsCodeValidatorTest uses org.junit.Test) -->
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>

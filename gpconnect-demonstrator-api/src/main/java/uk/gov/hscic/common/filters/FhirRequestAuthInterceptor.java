@@ -45,7 +45,7 @@ import uk.gov.hscic.common.util.NhsCodeValidator;
 @Component
 public class FhirRequestAuthInterceptor extends AuthorizationInterceptor {
 
-    private static final Logger LOG = LoggerFactory.getLogger("AuthLog");
+    private static final Logger LOG = LoggerFactory.getLogger(FhirRequestAuthInterceptor.class);
     private static final String PERMITTED_MEDIA_TYPE_HEADER_REGEX = "application/(xml|json)\\+fhir(;charset=utf-8)?";
 
     private static final String JWT_HEADER_TYP = "typ";

@@ -13,12 +13,11 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
-import uk.gov.hscic.common.config.RefreshData;
 
 @Component
 @Order(1)
 public class DefaultHeaderFilter implements Filter {
-    private static final Logger LOG = LogManager.getLogger(RefreshData.class);
+    private static final Logger LOG = LogManager.getLogger(DefaultHeaderFilter.class);
 
     @Override
     public void init(FilterConfig config) throws ServletException { }

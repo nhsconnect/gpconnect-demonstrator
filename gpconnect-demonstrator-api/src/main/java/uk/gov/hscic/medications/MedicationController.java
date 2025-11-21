@@ -18,7 +18,7 @@ import java.util.Map;
 @RequestMapping("api/")
 public class MedicationController {
 
-    private static final org.apache.logging.log4j.Logger LOG = LogManager.getLogger(RefreshData.class);
+    private static final org.apache.logging.log4j.Logger LOG = LogManager.getLogger(MedicationController.class);
 
     @Autowired
     private MedicationResourceProvider medicationResourceProvider;

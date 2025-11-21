@@ -34,7 +34,7 @@ import uk.gov.hscic.common.config.RefreshData;
 
 @Component
 public class ValueSetValidator {
-    private static final Logger LOG = LogManager.getLogger(RefreshData.class);
+    private static final Logger LOG = LogManager.getLogger(ValueSetValidator.class);
     
     @Value("${fhirvaluesets.checkDisk}")
     private Boolean fhirValueSetsCheckDisk;

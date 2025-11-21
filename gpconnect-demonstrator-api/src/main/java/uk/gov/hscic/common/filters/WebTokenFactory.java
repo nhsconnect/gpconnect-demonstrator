@@ -39,7 +39,7 @@ import static uk.gov.hscic.common.filters.FhirRequestGenericIntercepter.throwUnp
 @Component
 public class WebTokenFactory {
 
-    private static final Logger LOG = LogManager.getLogger(RefreshData.class);
+    private static final Logger LOG = LogManager.getLogger(WebTokenFactory.class);
     private static final List<String> CONTENT_TYPES = Arrays.asList(
             "application/fhir+json",
             "application/fhir+xml"

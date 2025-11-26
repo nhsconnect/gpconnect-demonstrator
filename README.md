@@ -200,8 +200,11 @@ In some areas the demonstrator does not conform to the GP Connect specification 
 Each failing test is documented below by feature area
 
 ##### Feature: Search for free slots
-| Scenario | Reason for non-conformance |
-|---|---|
-|I perform a getSchedule with invalid end date and or start date parameters|The Hapi FHIR Java library interprets blank/empty String params as null as opposed to passing the data direct to the demonstrator. Since the values are null the code falls into a different block of logic, one designed to return a 400 instead of a 422 as would be the case if the blank values were passed through uninterpreted .|
+| Scenario                                                                   | Reason for non-conformance |
+|----------------------------------------------------------------------------|---|
+| I perform a getSchedule with invalid end date and or start date parameters |The Hapi FHIR Java library interprets blank/empty String params as null as opposed to passing the data direct to the demonstrator. Since the values are null the code falls into a different block of logic, one designed to return a 400 instead of a 422 as would be the case if the blank values were passed through uninterpreted .|
+
+##### CVE update
+Applied bare minimum update to address critical CVE issues.
 
 ##### ENJOY!

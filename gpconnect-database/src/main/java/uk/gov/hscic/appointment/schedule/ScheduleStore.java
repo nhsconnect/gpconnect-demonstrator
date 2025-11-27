@@ -12,7 +12,10 @@ public class ScheduleStore {
     private ScheduleRepository scheduleRepository;
 
     public ScheduleDetail findSchedule(Long id){
-        ScheduleEntity scheduleEntity = scheduleRepository.getById(id);
+        ScheduleEntity scheduleEntity = scheduleRepository.findById(id).orElse(null);
+        if (scheduleEntity == null) {
+            return null;
+        }
         return entityToDetailTransformer.transform(scheduleEntity);
     }
 }

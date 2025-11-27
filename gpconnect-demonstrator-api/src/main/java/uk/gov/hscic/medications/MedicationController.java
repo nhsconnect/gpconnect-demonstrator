@@ -1,9 +1,11 @@
 package uk.gov.hscic.medications;
 
-import org.apache.log4j.Logger;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import uk.gov.hscic.medication.statement.MedicationStatementEntity;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
 
 import java.text.ParseException;
 import java.util.LinkedHashMap;
@@ -17,7 +19,7 @@ import java.util.Map;
 @RequestMapping("api/")
 public class MedicationController {
 
-    private static final Logger LOG = Logger.getLogger("MedicationsLog");
+    private static final Logger LOG = LogManager.getLogger(MedicationController.class);
 
     @Autowired
     private MedicationResourceProvider medicationResourceProvider;

@@ -35,7 +35,7 @@ import uk.gov.hscic.practitioner.PractitionerResourceProvider;
 import uk.gov.hscic.slots.SlotResourceProvider;
 
 @Configuration
-@WebServlet(urlPatterns = {"/fhir/*"}, displayName = "FHIR Server")
+@WebServlet(urlPatterns = {"/fhir/*"}, displayName = "FHIR Server", loadOnStartup = 1)
 public class FhirRestfulServlet extends RestfulServer {
     private static final long serialVersionUID = 1L;
 

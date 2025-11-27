@@ -16,7 +16,10 @@ public class HealthcareServiceStore {
      * @return HealthcareServiceDetail
      */
     public HealthcareServiceDetail findHealthcareService(Long id){
-        HealthcareServiceEntity healthcareServiceEntity = healthcareServiceRepository.getById(id);
+        HealthcareServiceEntity healthcareServiceEntity = healthcareServiceRepository.findById(id).orElse(null);
+        if (healthcareServiceEntity == null) {
+            return null;
+        }
         return entityToDetailTransformer.transform(healthcareServiceEntity);
     }
 }

@@ -19,11 +19,11 @@ import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.hl7.fhir.dstu3.model.Coding;
 import org.hl7.fhir.dstu3.model.OperationOutcome.IssueType;
 import org.hl7.fhir.dstu3.model.ValueSet;
-import org.hl7.fhir.dstu3.model.ValueSet.ConceptSetComponent;
 import org.hl7.fhir.dstu3.model.ValueSet.ValueSetComposeComponent;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -32,7 +32,7 @@ import uk.gov.hscic.SystemCode;
 
 @Component
 public class ValueSetValidator {
-    private static final Logger LOG = Logger.getLogger(ValueSetValidator.class);
+    private static final Logger LOG = LogManager.getLogger(ValueSetValidator.class);
     
     @Value("${fhirvaluesets.checkDisk}")
     private Boolean fhirValueSetsCheckDisk;

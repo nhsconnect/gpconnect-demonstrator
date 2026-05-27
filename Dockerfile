@@ -78,11 +78,22 @@ RUN addgroup -g 1000 node \
 FROM node8 AS ui-build
 WORKDIR /app
 
-RUN npm install -g npm@4.5.0 grunt-cli bower
+RUN npm install -g npm@4.5.0 grunt-cli@1.3.2 bower
 COPY ./webapp/ .
-RUN apk add --no-cache git
-# RUN cd /app/webapp && pwd && ls && bower install --allow-root && bower update --allow-root && npm update && grunt build 
-CMD ["tail", "-f", "/dev/null"]
+RUN apk add --no-cache optipng
+RUN apk add --no-cache --virtual .js-build-deps git autoconf automake libtool g++ gcc gnupg libgcc linux-headers make
+RUN git config --global url."https://github.com/".insteadOf git://github.com/ \
+ && bower install --allow-root \
+ && bower update --allow-root \
+ && npm update \
+ && rm /app/node_modules/optipng-bin/vendor/optipng \
+ && ln -sf /usr/bin/optipng /app/node_modules/optipng-bin/vendor/optipng \
+ && grunt build
+RUN apk del .js-build-deps
+
+WORKDIR /app/app
+
+CMD ["grunt", "serve"]
 
 #
 # Springboot maven war build

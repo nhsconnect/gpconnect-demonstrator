@@ -25,7 +25,7 @@
         "fullcalendar": "2.4.0",
         "angular-ui-calendar": "latest",
         "angular-ui-tree": "2.15.0",
-        "angular-spinner": "0.7.0",
+        "bower-angular-spinner": "https://github.com/tadodotcom/bower-angular-spinner.git",
         "angular-gantt": "1.2.13",
         "jsrsasign": "5.0.13"
     },

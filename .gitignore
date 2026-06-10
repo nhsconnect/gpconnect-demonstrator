@@ -15,6 +15,9 @@ nb-configuration.xml
 nbactions.xml
 nbproject
 
+# VSCode #
+.vscode/
+
 # Misc #
 gpconnect-demonstrator-api/src/main/webapp
 log

@@ -111,7 +111,7 @@ RUN mvn -e verify clean package
 FROM alpine:latest
 WORKDIR /app
 
-RUN apk add openjdk11
+RUN apk add openjdk11-jre
 
 #
 # Copy war as app.war and config folders
